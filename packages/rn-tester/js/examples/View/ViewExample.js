@@ -10,8 +10,6 @@
 
 'use strict';
 
-import type {RNTesterModule} from '../../types/RNTesterTypes';
-
 import * as React from 'react';
 import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 
@@ -393,11 +391,37 @@ export default ({
       name: 'background-color',
       render(): React.Node {
         return (
-          <View
-            testID="view-test-background-color"
-            style={{backgroundColor: '#527FE4', padding: 5}}>
-            <Text style={{fontSize: 11}}>Blue background</Text>
-          </View>
+          <>
+            <View
+              testID="view-test-background-color"
+              style={{backgroundColor: '#527FE4', padding: 5}}>
+              <Text style={{fontSize: 11}}>Blue background</Text>
+            </View>
+            <View
+              testID={testID}
+              style={{
+                backgroundColor: '#FF0000',
+                borderColor: 'color(display-p3 1 0 0)',
+                borderWidth: 15,
+                padding: 5,
+              }}>
+              <Text style={{color: 'color(display-p3 1 0 0)', fontSize: 11}}>
+                sRGB Red background
+              </Text>
+            </View>
+            <View
+              testID={testID}
+              style={{
+                backgroundColor: 'color(display-p3 1 0 0)',
+                borderColor: '#FF0000',
+                borderWidth: 15,
+                padding: 5,
+              }}>
+              <Text style={{color: '#FF0000', fontSize: 11}}>
+                displayP3 Red background
+              </Text>
+            </View>
+          </>
         );
       },
     },

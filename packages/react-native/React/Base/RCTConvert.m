@@ -878,6 +878,19 @@ static NSString *RCTSemanticColorNames(void)
   return names;
 }
 
+typedef NS_ENUM(NSInteger, ColorSpace) {
+  sRGB,
+  displayP3,
+};
+
++ (UIColor *)createColorFrom:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha andColorSpace:(ColorSpace)colorSpace
+{
+  if (colorSpace == displayP3) {
+    return [UIColor colorWithDisplayP3Red:red green:green blue:blue alpha:alpha];
+  }
+  return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+}
+
 + (UIColor *)UIColor:(id)json
 {
   if (!json) {
@@ -900,7 +913,15 @@ static NSString *RCTSemanticColorNames(void)
   } else if ([json isKindOfClass:[NSDictionary class]]) {
     NSDictionary *dictionary = json;
     id value = nil;
-    if ((value = [dictionary objectForKey:@"semantic"])) {
+    if ((value = [dictionary objectForKey:@"display-p3"]) ||
+        (value = [dictionary objectForKey:@"srgb"])) {
+      CGFloat r = [[dictionary objectForKey:@"r"] floatValue];
+      CGFloat g = [[dictionary objectForKey:@"g"] floatValue];
+      CGFloat b = [[dictionary objectForKey:@"b"] floatValue];
+      CGFloat a = [[dictionary objectForKey:@"a"] floatValue];
+      ColorSpace colorSpace = [dictionary objectForKey:@"display-p3"] ? displayP3 : sRGB;
+      return [self createColorFrom:r green:g blue:b alpha:a andColorSpace:colorSpace];
+    } else if ((value = [dictionary objectForKey:@"semantic"])) {
       if ([value isKindOfClass:[NSString class]]) {
         NSString *semanticName = value;
         UIColor *color = [UIColor colorNamed:semanticName];
