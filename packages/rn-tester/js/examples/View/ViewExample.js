@@ -398,7 +398,6 @@ export default ({
               <Text style={{fontSize: 11}}>Blue background</Text>
             </View>
             <View
-              testID={testID}
               style={{
                 backgroundColor: '#FF0000',
                 borderColor: 'color(display-p3 1 0 0)',
@@ -410,7 +409,6 @@ export default ({
               </Text>
             </View>
             <View
-              testID={testID}
               style={{
                 backgroundColor: 'color(display-p3 1 0 0)',
                 borderColor: '#FF0000',
