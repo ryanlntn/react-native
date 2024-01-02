@@ -878,14 +878,24 @@ static NSString *RCTSemanticColorNames(void)
   return names;
 }
 
-typedef NS_ENUM(NSInteger, RCTColorSpace) {
-  sRGB,
-  displayP3,
-};
+static BOOL defaultColorSpace = RCTColorSpaceSRGB;
+RCTColorSpace RCTGetDefaultColorSpace(void)
+{
+  return defaultColorSpace;
+}
+void RCTSetDefaultColorSpace(RCTColorSpace colorSpace) 
+{
+  defaultColorSpace = colorSpace;
+}
 
++ (UIColor *)createColorFrom:(CGFloat)r green:(CGFloat)g blue:(CGFloat)b alpha:(CGFloat)a
+{
+  RCTColorSpace space = RCTGetDefaultColorSpace();
+  return [self createColorFrom:r green:g blue:b alpha:a andColorSpace:space];
+}
 + (UIColor *)createColorFrom:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha andColorSpace:(RCTColorSpace)colorSpace
 {
-  if (colorSpace == displayP3) {
+  if (colorSpace == RCTColorSpaceDisplayP3) {
     return [UIColor colorWithDisplayP3Red:red green:green blue:blue alpha:alpha];
   }
   return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
@@ -899,7 +909,7 @@ typedef NS_ENUM(NSInteger, RCTColorSpace) {
   if ([json isKindOfClass:[NSArray class]]) {
     NSArray *components = [self NSNumberArray:json];
     CGFloat alpha = components.count > 3 ? [self CGFloat:components[3]] : 1.0;
-    return [UIColor colorWithRed:[self CGFloat:components[0]]
+    return [self createColorFrom:[self CGFloat:components[0]]
                            green:[self CGFloat:components[1]]
                             blue:[self CGFloat:components[2]]
                            alpha:alpha];
@@ -909,17 +919,21 @@ typedef NS_ENUM(NSInteger, RCTColorSpace) {
     CGFloat r = ((argb >> 16) & 0xFF) / 255.0;
     CGFloat g = ((argb >> 8) & 0xFF) / 255.0;
     CGFloat b = (argb & 0xFF) / 255.0;
-    return [UIColor colorWithRed:r green:g blue:b alpha:a];
+    return [self createColorFrom:r green:g blue:b alpha:a];
   } else if ([json isKindOfClass:[NSDictionary class]]) {
     NSDictionary *dictionary = json;
     id value = nil;
-    NSString *colorSpace = [dictionary objectForKey: @"space"];
-    if ([@[@"display-p3", @"srgb"] containsObject:colorSpace]) {
+    NSString *rawColorSpace = [dictionary objectForKey: @"space"];
+    if ([@[@"display-p3", @"srgb"] containsObject:rawColorSpace]) {
       CGFloat r = [[dictionary objectForKey:@"r"] floatValue];
       CGFloat g = [[dictionary objectForKey:@"g"] floatValue];
       CGFloat b = [[dictionary objectForKey:@"b"] floatValue];
       CGFloat a = [[dictionary objectForKey:@"a"] floatValue];
-      RCTColorSpace colorSpace = colorSpace == @"display-p3" ? displayP3 : sRGB;
+      RCTColorSpace colorSpace = [rawColorSpace isEqual: @"display-p3"]
+        ? RCTColorSpaceDisplayP3
+        : [rawColorSpace isEqual: @"srgb"] 
+        ? RCTColorSpaceSRGB
+        : RCTGetDefaultColorSpace();
       return [self createColorFrom:r green:g blue:b alpha:a andColorSpace:colorSpace];
     } else if ((value = [dictionary objectForKey:@"semantic"])) {
       if ([value isKindOfClass:[NSString class]]) {

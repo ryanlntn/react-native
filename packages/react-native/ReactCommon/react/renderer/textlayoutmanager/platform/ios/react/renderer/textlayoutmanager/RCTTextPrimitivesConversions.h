@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <React/RCTConvert.h>
 #import <UIKit/UIKit.h>
 
 #include <react/renderer/textlayoutmanager/RCTFontProperties.h>
@@ -113,8 +114,9 @@ inline static UIColor *RCTUIColorFromSharedColor(const facebook::react::SharedCo
   }
 
   auto components = facebook::react::colorComponentsFromColor(sharedColor);
-  if (components.colorSpace == facebook::react::ColorSpace::DisplayP3) {
-    return [UIColor colorWithDisplayP3Red:components.red green:components.green blue:components.blue alpha:components.alpha];
-  }
-  return [UIColor colorWithRed:components.red green:components.green blue:components.blue alpha:components.alpha];
+  return [RCTConvert createColorFrom:components.red
+                               green:components.green
+                                blue:components.blue
+                               alpha:components.alpha
+                       andColorSpace:(RCTColorSpace)components.colorSpace];
 }
