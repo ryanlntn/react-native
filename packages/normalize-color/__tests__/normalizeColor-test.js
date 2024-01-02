@@ -151,10 +151,34 @@ it('handles number colors properly', () => {
 });
 
 it('handles color function properly', () => {
-  expect(normalizeColor('color(display-p3 1 0 0)')).toEqual({"display-p3": true, r: 1, g: 0, b: 0, a: 1 });
-  expect(normalizeColor('color(display-p3 1 0 0 / 0.5)')).toEqual({"display-p3": true, r: 1, g: 0, b: 0, a: 0.5 });
-  expect(normalizeColor('color(srgb 1 0 0)')).toEqual({"srgb": true, r: 1, g: 0, b: 0, a: 1 });
-  expect(normalizeColor('color(srgb 1 0 0 / 0.5)')).toEqual({"srgb": true, r: 1, g: 0, b: 0, a: 0.5 });
+  expect(normalizeColor('color(display-p3 1 0 0)')).toEqual({
+    space: 'display-p3',
+    r: 1,
+    g: 0,
+    b: 0,
+    a: 1,
+  });
+  expect(normalizeColor('color(display-p3 1 0 0 / 0.5)')).toEqual({
+    space: 'display-p3',
+    r: 1,
+    g: 0,
+    b: 0,
+    a: 0.5,
+  });
+  expect(normalizeColor('color(srgb 1 0 0)')).toEqual({
+    space: 'srgb',
+    r: 1,
+    g: 0,
+    b: 0,
+    a: 1,
+  });
+  expect(normalizeColor('color(srgb 1 0 0 / 0.5)')).toEqual({
+    space: 'srgb',
+    r: 1,
+    g: 0,
+    b: 0,
+    a: 0.5,
+  });
 });
 
 it('returns the same color when it is already normalized', () => {

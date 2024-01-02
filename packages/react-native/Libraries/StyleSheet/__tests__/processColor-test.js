@@ -54,12 +54,18 @@ describe('processColor', () => {
   describe('color() strings', () => {
     it('should convert color(s r g b)', () => {
       const colorFromString = processColor('color(srgb 1 0 0)');
-      expect(colorFromString).toEqual({ srgb: true, r: 1, g: 0, b: 0, a: 1 });
+      expect(colorFromString).toEqual({space: 'srgb', r: 1, g: 0, b: 0, a: 1});
     });
 
     it('should convert color(s r g b / a)', () => {
       const colorFromString = processColor('color(display-p3 1 0 0 / 0.5)');
-      expect(colorFromString).toEqual({ "display-p3": true, r: 1, g: 0, b: 0, a: 0.5 });
+      expect(colorFromString).toEqual({
+        space: 'display-p3',
+        r: 1,
+        g: 0,
+        b: 0,
+        a: 0.5,
+      });
     });
   });
 

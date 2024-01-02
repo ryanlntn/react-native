@@ -7,9 +7,13 @@
  * @flow strict
  */
 
+enum ColorSpace {
+  SRGB = 'srgb',
+  DisplayP3 = 'display-p3',
+}
+
 export type RgbaValue = {
-  +'display-p3'?: true,
-  srgb?: true,
+  +space?: ColorSpace,
   +r: number,
   +g: number,
   +b: number,

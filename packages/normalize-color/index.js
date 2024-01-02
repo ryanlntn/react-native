@@ -156,19 +156,21 @@ function normalizeColor(color) {
   }
 
   if ((match = matchers.color.exec(color))) {
-    return match[2] ? { 
-      [match[2]]: true, 
-      r: parseFloat(match[3]), 
-      g: parseFloat(match[4]), 
-      b: parseFloat(match[5]), 
-      a: 1,
-    } : {
-      [match[6]]: true, 
-      r: parseFloat(match[7]), 
-      g: parseFloat(match[8]), 
-      b: parseFloat(match[9]), 
-      a: parseFloat(match[10]), 
-    };
+    return match[2]
+      ? {
+          space: match[2],
+          r: parseFloat(match[3]),
+          g: parseFloat(match[4]),
+          b: parseFloat(match[5]),
+          a: 1,
+        }
+      : {
+          space: match[6],
+          r: parseFloat(match[7]),
+          g: parseFloat(match[8]),
+          b: parseFloat(match[9]),
+          a: parseFloat(match[10]),
+        };
   }
 
   return null;
@@ -225,7 +227,7 @@ function hwbToRgb(h, w, b) {
   );
 }
 
-const COLOR_SPACE = 'display-p3|srgb'
+const COLOR_SPACE = 'display-p3|srgb';
 const NUMBER = '[-+]?\\d*\\.?\\d+';
 const PERCENTAGE = NUMBER + '%';
 
@@ -264,7 +266,7 @@ function getMatchers() {
         'rgba(' +
           commaSeparatedCall(NUMBER, NUMBER, NUMBER, NUMBER) +
           '|' +
-          callWithSlashSeparator(NUMBER, NUMBER, NUMBER, NUMBER) + 
+          callWithSlashSeparator(NUMBER, NUMBER, NUMBER, NUMBER) +
           ')',
       ),
       hsl: new RegExp('hsl' + call(NUMBER, PERCENTAGE, PERCENTAGE)),

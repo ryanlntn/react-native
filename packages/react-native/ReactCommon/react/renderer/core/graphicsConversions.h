@@ -47,17 +47,16 @@ inline void fromRawValue(
     colorComponents.blue = items.at(2);
     colorComponents.alpha = length == 4 ? items.at(3) : 1.0f;
   } else {
-    if (value.hasType<std::unordered_map<std::string, float>>()) {
-      auto items = (std::unordered_map<std::string, float>)value;
-      bool isDisplayP3 = items.find("display-p3") != items.end();
-      bool isSRGB = items.find("srgb") != items.end();
-      if (isDisplayP3 || isSRGB) {
-        colorComponents.red = items.at("r");
-        colorComponents.green = items.at("g");
-        colorComponents.blue = items.at("b");
-        colorComponents.alpha = items.at("a");
-        colorComponents.colorSpace =
-            isDisplayP3 ? ColorSpace::DisplayP3 : ColorSpace::sRGB;
+    if (value.hasType<std::unordered_map<std::string, RawValue>>()) {
+      auto items = (std::unordered_map<std::string, RawValue>)value;
+      if (items.find("space") != items.end()) {
+        colorComponents.red = (float)items.at("r");
+        colorComponents.green = (float)items.at("g");
+        colorComponents.blue = (float)items.at("b");
+        colorComponents.alpha = (float)items.at("a");
+        colorComponents.colorSpace = (std::string)items.at("space") == "display-p3"
+          ? ColorSpace::DisplayP3
+          : ColorSpace::sRGB;
         result = colorFromComponents(colorComponents);
         return;
       }

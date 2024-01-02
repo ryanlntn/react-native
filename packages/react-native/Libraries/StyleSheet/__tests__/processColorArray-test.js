@@ -41,9 +41,9 @@ describe('processColorArray', () => {
         'color(display-p3 0.3 0.4 0.5)',
       ]);
       expect(colorFromDisplayP3Array).toEqual([
-        {"display-p3": true, r: 0.1, g: 0.2, b: 0.3, a: 1},
-        {"display-p3": true, r: 0.2, g: 0.3, b: 0.4, a: 1},
-        {"display-p3": true, r: 0.3, g: 0.4, b: 0.5, a: 1},
+        {space: 'display-p3', r: 0.1, g: 0.2, b: 0.3, a: 1},
+        {space: 'display-p3', r: 0.2, g: 0.3, b: 0.4, a: 1},
+        {space: 'display-p3', r: 0.3, g: 0.4, b: 0.5, a: 1},
       ]);
     });
 
