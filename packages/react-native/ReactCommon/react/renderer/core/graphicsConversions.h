@@ -54,9 +54,13 @@ inline void fromRawValue(
         colorComponents.green = (float)items.at("g");
         colorComponents.blue = (float)items.at("b");
         colorComponents.alpha = (float)items.at("a");
-        colorComponents.colorSpace = (std::string)items.at("space") == "display-p3"
-          ? ColorSpace::DisplayP3
-          : ColorSpace::sRGB;
+        colorComponents.colorSpace = defaultColorSpace;
+        std::string space = items.at("space");
+        if (space == "display-p3") {
+          colorComponents.colorSpace = ColorSpace::DisplayP3;
+        } else if (space == "srgb") {
+          colorComponents.colorSpace = ColorSpace::sRGB;
+        }
         result = colorFromComponents(colorComponents);
         return;
       }

@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <React/RCTConvert.h>
 #import <UIKit/UIKit.h>
 
-#import <React/RCTLog.h>
 #import <react/renderer/components/view/AccessibilityPrimitives.h>
 #import <react/renderer/components/view/primitives.h>
 #import <react/renderer/core/LayoutPrimitives.h>
@@ -54,10 +54,11 @@ inline UIColor *_Nullable RCTUIColorFromSharedColor(const facebook::react::Share
   }
 
   auto components = facebook::react::colorComponentsFromColor(sharedColor);
-  if (components.colorSpace == facebook::react::ColorSpace::DisplayP3) {
-    return [UIColor colorWithDisplayP3Red:components.red green:components.green blue:components.blue alpha:components.alpha];
-  }
-  return [UIColor colorWithRed:components.red green:components.green blue:components.blue alpha:components.alpha];
+  return [RCTConvert createColorFrom:components.red
+                               green:components.green
+                                blue:components.blue
+                               alpha:components.alpha
+                       andColorSpace:(RCTColorSpace)components.colorSpace];
 }
 
 inline CF_RETURNS_RETAINED CGColorRef _Nullable RCTCreateCGColorRefFromSharedColor(
