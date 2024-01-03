@@ -54,7 +54,7 @@ inline void fromRawValue(
         colorComponents.green = (float)items.at("g");
         colorComponents.blue = (float)items.at("b");
         colorComponents.alpha = (float)items.at("a");
-        colorComponents.colorSpace = defaultColorSpace;
+        colorComponents.colorSpace = getDefaultColorSpace();
         std::string space = (std::string)items.at("space");
         if (space == "display-p3") {
           colorComponents.colorSpace = ColorSpace::DisplayP3;
