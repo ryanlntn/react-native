@@ -107,6 +107,7 @@ typedef NSURL RCTFileURL;
                         blue:(CGFloat)blue
                        alpha:(CGFloat)alpha
                andColorSpace:(RCTColorSpace)colorSpace;
++ (RCTColorSpace)colorSpaceFromString:(NSString *)colorSpace;
 + (UIColor *)UIColor:(id)json;
 + (CGColorRef)CGColor:(id)json CF_RETURNS_NOT_RETAINED;
 

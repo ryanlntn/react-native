@@ -903,6 +903,15 @@ void RCTSetDefaultColorSpace(RCTColorSpace colorSpace)
   return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
++ (RCTColorSpace)colorSpaceFromString:(NSString *)colorSpace {
+  if ([colorSpace isEqualToString:@"display-p3"]) {
+    return RCTColorSpaceDisplayP3;
+  } else if ([colorSpace isEqualToString:@"srgb"]) {
+    return RCTColorSpaceSRGB;
+  }
+  return RCTGetDefaultColorSpace();
+}
+
 + (UIColor *)UIColor:(id)json
 {
   if (!json) {
@@ -931,11 +940,7 @@ void RCTSetDefaultColorSpace(RCTColorSpace colorSpace)
       CGFloat g = [[dictionary objectForKey:@"g"] floatValue];
       CGFloat b = [[dictionary objectForKey:@"b"] floatValue];
       CGFloat a = [[dictionary objectForKey:@"a"] floatValue];
-      RCTColorSpace colorSpace = [rawColorSpace isEqual: @"display-p3"]
-        ? RCTColorSpaceDisplayP3
-        : [rawColorSpace isEqual: @"srgb"] 
-        ? RCTColorSpaceSRGB
-        : RCTGetDefaultColorSpace();
+      RCTColorSpace colorSpace = [self colorSpaceFromString: rawColorSpace];
       return [self createColorFrom:r green:g blue:b alpha:a andColorSpace:colorSpace];
     } else if ((value = [dictionary objectForKey:@"semantic"])) {
       if ([value isKindOfClass:[NSString class]]) {
