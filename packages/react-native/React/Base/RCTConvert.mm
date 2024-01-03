@@ -16,6 +16,8 @@
 #import "RCTParserUtils.h"
 #import "RCTUtils.h"
 
+#import <react/renderer/graphics/ColorComponents.h>
+
 @implementation RCTConvert
 
 RCT_CONVERTER(id, id, self)
@@ -439,7 +441,7 @@ RCT_ENUM_CONVERTER(
     mapping = temporaryMapping;
   });
 
-  UIKeyboardType type = RCTConvertEnumValue("UIKeyboardType", mapping, @(UIKeyboardTypeDefault), json).integerValue;
+  UIKeyboardType type = (UIKeyboardType)RCTConvertEnumValue("UIKeyboardType", mapping, @(UIKeyboardTypeDefault), json).integerValue;
   return type;
 }
 
@@ -844,7 +846,7 @@ static UIColor *RCTColorFromSemanticColorName(NSString *semanticColorName)
     RCTAssert([UIColor respondsToSelector:selector], @"RCTUIColor does not respond to a semantic color selector.");
     Class klass = [UIColor class];
     IMP imp = [klass methodForSelector:selector];
-    id (*getSemanticColorObject)(id, SEL) = (void *)imp;
+    id (*getSemanticColorObject)(id, SEL) = (id (*)(id, SEL))imp;
     id colorObject = getSemanticColorObject(klass, selector);
     if ([colorObject isKindOfClass:[UIColor class]]) {
       color = colorObject;
@@ -878,14 +880,14 @@ static NSString *RCTSemanticColorNames(void)
   return names;
 }
 
-static BOOL defaultColorSpace = RCTColorSpaceSRGB;
+static BOOL defaultColorSpace = (RCTColorSpace)facebook::react::defaultColorSpace;
 RCTColorSpace RCTGetDefaultColorSpace(void)
 {
-  return defaultColorSpace;
+  return (RCTColorSpace)facebook::react::defaultColorSpace;
 }
 void RCTSetDefaultColorSpace(RCTColorSpace colorSpace) 
 {
-  defaultColorSpace = colorSpace;
+  facebook::react::setDefaultColorSpace((facebook::react::ColorSpace)colorSpace);
 }
 
 + (UIColor *)createColorFrom:(CGFloat)r green:(CGFloat)g blue:(CGFloat)b alpha:(CGFloat)a
