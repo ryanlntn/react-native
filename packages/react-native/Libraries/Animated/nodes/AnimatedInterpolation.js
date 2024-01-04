@@ -157,7 +157,9 @@ function mapStringToNumericComponents(
   | {isColor: false, components: $ReadOnlyArray<number | string>} {
   let normalizedColor = normalizeColor(input);
   invariant(
-    normalizedColor == null || typeof normalizedColor !== 'object',
+    normalizedColor == null ||
+      typeof normalizedColor !== 'object' ||
+      normalizedColor.hasOwnProperty('space'),
     'PlatformColors are not supported',
   );
 
