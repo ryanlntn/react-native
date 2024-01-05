@@ -21,7 +21,9 @@
   RCTValueAnimatedNode *bNode = (RCTValueAnimatedNode *)[self.parentNodes objectForKey:self.config[@"b"]];
   RCTValueAnimatedNode *aNode = (RCTValueAnimatedNode *)[self.parentNodes objectForKey:self.config[@"a"]];
 
-  _color = RCTColorFromComponents(rNode.value, gNode.value, bNode.value, aNode.value);
+  _color = self.config[@"space"] != nil
+    ? RCTColorFromComponents(rNode.value * 255, gNode.value * 255, bNode.value * 255, aNode.value) 
+    : RCTColorFromComponents(rNode.value, gNode.value, bNode.value, aNode.value);
 
   // TODO (T111179606): Support platform colors for color animations
 }

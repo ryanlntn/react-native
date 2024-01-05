@@ -316,6 +316,7 @@ export default class AnimatedColor extends AnimatedWithChildren {
   __getNativeConfig(): {...} {
     return {
       type: 'color',
+      space: this.space,
       r: this.r.__getNativeTag(),
       g: this.g.__getNativeTag(),
       b: this.b.__getNativeTag(),

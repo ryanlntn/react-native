@@ -394,7 +394,10 @@ export default class AnimatedInterpolation<
       // $FlowIgnoreMe[incompatible-cast]
       outputRange = ((outputRange: $ReadOnlyArray<string>).map(value => {
         const processedColor = processColor(value);
-        if (typeof processedColor === 'number') {
+        if (
+          typeof processedColor === 'number' ||
+          processedColor.hasOwnProperty('space')
+        ) {
           outputType = 'color';
           return processedColor;
         } else {
