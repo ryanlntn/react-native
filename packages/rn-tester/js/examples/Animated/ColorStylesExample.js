@@ -20,12 +20,14 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
   const animations = [];
 
   const animatedViewStyle = {
-    backgroundColor: new Animated.Color('blue'),
+    // backgroundColor: new Animated.Color('blue'),
+    backgroundColor: new Animated.Color('color(display-p3 0 0 1)'),
     borderColor: new Animated.Color('orange'),
   };
   animations.push(
     Animated.timing(animatedViewStyle.backgroundColor, {
-      toValue: new Animated.Color('red'),
+      // toValue: new Animated.Color('red'),
+      toValue: new Animated.Color('color(display-p3 1 0 0)'),
       duration: 1000,
       useNativeDriver,
     }),
@@ -42,7 +44,8 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
   const interpolationAnimatedStyle = {
     backgroundColor: animatedBaseValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['blue', 'red'],
+      // outputRange: ['blue', 'red'],
+      outputRange: ['color(display-p3 0 0 1)', 'color(display-p3 1 0 0)'],
     }),
     borderColor: animatedBaseValue.interpolate({
       inputRange: [0, 1],
@@ -58,11 +61,13 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
   );
 
   const animatedFirstSpanTextStyle = {
-    color: new Animated.Color('blue'),
+    // color: new Animated.Color('blue'),
+    color: new Animated.Color('color(display-p3 0 0 1)'),
   };
   animations.push(
     Animated.timing(animatedFirstSpanTextStyle.color, {
-      toValue: new Animated.Color('red'),
+      // toValue: new Animated.Color('red'),
+      toValue: new Animated.Color('color(display-p3 1 0 0)'),
       duration: 1000,
       useNativeDriver,
     }),
@@ -80,11 +85,13 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
   );
 
   const animatedImageStyle = {
-    tintColor: new Animated.Color('blue'),
+    // tintColor: new Animated.Color('blue'),
+    tintColor: new Animated.Color('color(display-p3 0 0 1)'),
   };
   animations.push(
     Animated.timing(animatedImageStyle.tintColor, {
-      toValue: new Animated.Color('red'),
+      // toValue: new Animated.Color('red'),
+      toValue: new Animated.Color('color(display-p3 1 0 0)'),
       duration: 1000,
       useNativeDriver,
     }),
@@ -114,16 +121,18 @@ function AnimatedView({useNativeDriver}: {useNativeDriver: boolean}) {
         <Animated.Text style={animatedSecondSpanTextStyle}>fox</Animated.Text>
         <Text> jumps over the lazy dog</Text>
       </Text>
-      <Animated.Image
-        style={[styles.animatedImage, animatedImageStyle]}
-        source={require('../../assets/bunny.png')}
-      />
+      <View style={{backgroundColor: 'color(display-p3 1 0 0)'}}>
+        <Animated.Image
+          style={[styles.animatedImage, animatedImageStyle]}
+          source={require('../../assets/bunny.png')}
+        />
+      </View>
     </>
   );
 }
 
 function AnimatedColorStyleExample(): React.Node {
-  const [useNativeDriver, setUseNativeDriver] = React.useState(false);
+  const [useNativeDriver, setUseNativeDriver] = React.useState(true);
 
   return (
     <View>
