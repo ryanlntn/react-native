@@ -11,13 +11,9 @@ namespace facebook::react {
 
 enum class ColorSpace { sRGB, DisplayP3 };
 
-static ColorSpace defaultColorSpace = ColorSpace::sRGB;
-ColorSpace getDefaultColorSpace() {
-  return defaultColorSpace;
-}
-void setDefaultColorSpace(ColorSpace newColorSpace) {
-  defaultColorSpace = newColorSpace;
-}
+// Declare the functions without providing definitions
+ColorSpace getDefaultColorSpace();
+void setDefaultColorSpace(ColorSpace newColorSpace);
 
 struct ColorComponents {
   float red{0};
