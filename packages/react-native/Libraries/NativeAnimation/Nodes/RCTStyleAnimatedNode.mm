@@ -50,7 +50,7 @@
         [_propsDictionary addEntriesFromDictionary:transformAnimatedNode.propsDictionary];
       } else if ([node isKindOfClass:[RCTColorAnimatedNode class]]) {
         RCTColorAnimatedNode *colorAnimatedNode = (RCTColorAnimatedNode *)node;
-        _propsDictionary[property] = @(colorAnimatedNode.color);
+        _propsDictionary[property] = colorAnimatedNode.color;
       } else if ([node isKindOfClass:[RCTObjectAnimatedNode class]]) {
         RCTObjectAnimatedNode *objectAnimatedNode = (RCTObjectAnimatedNode *)node;
         _propsDictionary[property] = objectAnimatedNode.value;

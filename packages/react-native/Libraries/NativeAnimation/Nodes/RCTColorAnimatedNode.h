@@ -9,6 +9,7 @@
 
 @interface RCTColorAnimatedNode : RCTAnimatedNode
 
-@property (nonatomic, assign) int32_t color;
+// @property (nonatomic, strong) UIColor *color;
+@property (nonatomic, strong) NSDictionary<NSString *, id> *color;
 
 @end
