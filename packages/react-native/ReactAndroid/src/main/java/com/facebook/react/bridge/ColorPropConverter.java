@@ -9,7 +9,10 @@ package com.facebook.react.bridge;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.util.TypedValue;
+import androidx.annotation.ColorLong;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import com.facebook.common.logging.FLog;
@@ -39,8 +42,22 @@ public class ColorPropConverter {
 
     if (value instanceof ReadableMap) {
       ReadableMap map = (ReadableMap) value;
-      ReadableArray resourcePaths = map.getArray(JSON_KEY);
 
+      // handle color(space r g b a) value
+      if (map.hasKey("space")) {
+        ColorSpace space = ColorSpace
+            .get(map.getString("space") == "display-p3" ? ColorSpace.Named.DISPLAY_P3 : ColorSpace.Named.SRGB);
+        float r = (float) map.getDouble("r");
+        float g = (float) map.getDouble("g");
+        float b = (float) map.getDouble("b");
+        float a = (float) map.getDouble("a");
+
+        @ColorLong
+        long color = Color.pack(r, g, b, a, space);
+        return Color.valueOf(color).toArgb();
+      }
+
+      ReadableArray resourcePaths = map.getArray(JSON_KEY);
       if (resourcePaths == null) {
         throw new JSApplicationCausedNativeException(
             "ColorValue: The `" + JSON_KEY + "` must be an array of color resource path strings.");
@@ -89,8 +106,9 @@ public class ColorPropConverter {
         return resolveThemeAttribute(context, resourcePath);
       }
     } catch (Resources.NotFoundException exception) {
-      // The resource could not be found so do nothing to allow the for loop to continue and
-      // try the next fallback resource in the array.  If none of the fallbacks are
+      // The resource could not be found so do nothing to allow the for loop to
+      // continue and
+      // try the next fallback resource in the array. If none of the fallbacks are
       // found then the exception immediately after the for loop will be thrown.
     }
     return null;
