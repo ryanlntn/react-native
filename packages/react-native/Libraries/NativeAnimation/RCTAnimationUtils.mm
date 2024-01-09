@@ -84,7 +84,8 @@ CGFloat RCTInterpolateValueInRange(
   return RCTInterpolateValue(value, inputMin, inputMax, outputMin, outputMax, extrapolateLeft, extrapolateRight);
 }
 
-uint32_t RCTInterpolateColorInRange(CGFloat value, NSArray<NSNumber *> *inputRange, NSArray<UIColor *> *outputRange)
+//UIColor* RCTInterpolateColorInRange(CGFloat value, NSArray<NSNumber *> *inputRange, NSArray<UIColor *> *outputRange)
+NSDictionary<NSString *, id>* RCTInterpolateColorInRange(CGFloat value, NSArray<NSNumber *> *inputRange, NSArray<UIColor *> *outputRange)
 {
   NSUInteger rangeIndex = RCTFindIndexOfNearestValue(value, inputRange);
   CGFloat inputMin = inputRange[rangeIndex].doubleValue;
@@ -94,12 +95,20 @@ uint32_t RCTInterpolateColorInRange(CGFloat value, NSArray<NSNumber *> *inputRan
   [outputRange[rangeIndex] getRed:&redMin green:&greenMin blue:&blueMin alpha:&alphaMin];
   CGFloat redMax, greenMax, blueMax, alphaMax;
   [outputRange[rangeIndex + 1] getRed:&redMax green:&greenMax blue:&blueMax alpha:&alphaMax];
-
-  return RCTColorFromComponents(
-      0xFF * (redMin + (value - inputMin) * (redMax - redMin) / (inputMax - inputMin)),
-      0xFF * (greenMin + (value - inputMin) * (greenMax - greenMin) / (inputMax - inputMin)),
-      0xFF * (blueMin + (value - inputMin) * (blueMax - blueMin) / (inputMax - inputMin)),
-      alphaMin + (value - inputMin) * (alphaMax - alphaMin) / (inputMax - inputMin));
+    
+  CGFloat r = redMin + (value - inputMin) * (redMax - redMin) / (inputMax - inputMin);
+  CGFloat g = greenMin + (value - inputMin) * (greenMax - greenMin) / (inputMax - inputMin);
+  CGFloat b = blueMin + (value - inputMin) * (blueMax - blueMin) / (inputMax - inputMin);
+  CGFloat a = alphaMin + (value - inputMin) * (alphaMax - alphaMin) / (inputMax - inputMin);
+    
+//  return [UIColor colorWithRed:r green:g blue:b alpha:a];
+  return @{
+    @"space": @"srgb",
+    @"r":@(r),
+    @"g":@(g),
+    @"b":@(b),
+    @"a":@(a),
+  };
 }
 
 uint32_t RCTColorFromComponents(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha)
