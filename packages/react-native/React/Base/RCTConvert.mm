@@ -880,10 +880,10 @@ static NSString *RCTSemanticColorNames(void)
   return names;
 }
 
-static RCTColorSpace defaultColorSpace = (RCTColorSpace)facebook::react::defaultColorSpace;
+static RCTColorSpace defaultColorSpace = (RCTColorSpace)facebook::react::getDefaultColorSpace();
 RCTColorSpace RCTGetDefaultColorSpace(void)
 {
-  return (RCTColorSpace)facebook::react::defaultColorSpace;
+  return (RCTColorSpace)facebook::react::getDefaultColorSpace();
 }
 void RCTSetDefaultColorSpace(RCTColorSpace colorSpace)
 {
