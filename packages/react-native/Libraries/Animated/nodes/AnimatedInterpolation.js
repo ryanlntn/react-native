@@ -394,12 +394,16 @@ export default class AnimatedInterpolation<
       // $FlowIgnoreMe[incompatible-cast]
       outputRange = ((outputRange: $ReadOnlyArray<string>).map(value => {
         const processedColor = processColor(value);
-        if (
-          typeof processedColor === 'number' ||
-          processedColor.hasOwnProperty('space')
-        ) {
+        if (typeof processedColor === 'number') {
           outputType = 'color';
           return processedColor;
+        } else if (processedColor.hasOwnProperty('space')) {
+          const {r, g, b, a} = processedColor;
+          const reprocessedColor = processColor(
+            `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${a})`,
+          );
+          outputType = 'color';
+          return reprocessedColor;
         } else {
           return NativeAnimatedHelper.transformDataType(value);
         }
