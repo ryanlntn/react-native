@@ -10,18 +10,21 @@ package com.facebook.react.views.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.graphics.ColorFilter;
 import android.graphics.DashPathEffect;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
+import android.graphics.PixelFormat;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import androidx.annotation.ColorLong;
 import androidx.annotation.Nullable;
 import com.facebook.react.common.annotations.VisibleForTesting;
 import com.facebook.react.modules.i18nmanager.I18nUtil;
@@ -102,8 +105,7 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   /* Used by all types of background and for drawing borders */
   private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-  private int mColor = Color.TRANSPARENT;
-  private int mAlpha = 255;
+  private Color mColor = Color.valueOf(Color.TRANSPARENT);
 
   // There is a small gap between the edges of adjacent paths
   // such as between the mBackgroundColorRenderPath and its border.
@@ -168,15 +170,16 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @Override
   public void setAlpha(int alpha) {
-    if (alpha != mAlpha) {
-      mAlpha = alpha;
+    int currentAlpha = getAlpha();
+    if (alpha != currentAlpha) {
+      mColor = Color.valueOf(mColor.red(), mColor.green(), mColor.blue(), alpha / 255f);
       invalidateSelf();
     }
   }
 
   @Override
   public int getAlpha() {
-    return mAlpha;
+    return Color.alpha(mColor.toArgb());
   }
 
   @Override
@@ -186,7 +189,14 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @Override
   public int getOpacity() {
-    return ColorUtil.getOpacityFromColor(ColorUtil.multiplyColorAlpha(mColor, mAlpha));
+    float alpha = mColor.alpha();
+    if (alpha == 1.0f) {
+      return PixelFormat.OPAQUE;
+    } else if (alpha == 0.0f) {
+      return PixelFormat.TRANSPARENT;
+    } else {
+      return PixelFormat.TRANSLUCENT;
+    }
   }
 
   /* Android's elevation implementation requires this to be implemented to know where to draw the shadow. */
@@ -304,8 +314,16 @@ public class ReactViewBackgroundDrawable extends Drawable {
     return radius;
   }
 
-  public void setColor(int color) {
+  public void setColor(Color color) {
     mColor = color;
+    invalidateSelf();
+  }
+  public void setColor(int color) {
+    mColor = Color.valueOf(color);
+    invalidateSelf();
+  }
+  public void setColor(long color) {
+    mColor = Color.valueOf(color);
     invalidateSelf();
   }
 
@@ -330,7 +348,7 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @VisibleForTesting
   public int getColor() {
-    return mColor;
+    return mColor.toArgb();
   }
 
   private void drawRoundedBackgroundWithBorders(Canvas canvas) {
@@ -341,9 +359,8 @@ public class ReactViewBackgroundDrawable extends Drawable {
     canvas.clipPath(mOuterClipPathForBorderRadius, Region.Op.INTERSECT);
 
     // Draws the View without its border first (with background color fill)
-    int useColor = ColorUtil.multiplyColorAlpha(mColor, mAlpha);
-    if (Color.alpha(useColor) != 0) { // color is not transparent
-      mPaint.setColor(useColor);
+    if (mColor.alpha() != 0.0f) { // color is not transparent
+      mPaint.setColor(mColor.pack());
       mPaint.setStyle(Paint.Style.FILL);
       canvas.drawPath(mBackgroundColorRenderPath, mPaint);
     }
@@ -386,7 +403,7 @@ public class ReactViewBackgroundDrawable extends Drawable {
           && colorRight == borderColor
           && colorBottom == borderColor) {
         if (fullBorderWidth > 0) {
-          mPaint.setColor(ColorUtil.multiplyColorAlpha(borderColor, mAlpha));
+          mPaint.setColor(ColorUtil.multiplyColorAlpha(borderColor, getAlpha()));
           mPaint.setStyle(Paint.Style.STROKE);
           mPaint.setStrokeWidth(fullBorderWidth);
           canvas.drawPath(mCenterDrawPath, mPaint);
@@ -1131,9 +1148,8 @@ public class ReactViewBackgroundDrawable extends Drawable {
   private void drawRectangularBackgroundWithBorders(Canvas canvas) {
     mPaint.setStyle(Paint.Style.FILL);
 
-    int useColor = ColorUtil.multiplyColorAlpha(mColor, mAlpha);
-    if (Color.alpha(useColor) != 0) { // color is not transparent
-      mPaint.setColor(useColor);
+    if (mColor.alpha() != 0.0f) { // color is not transparent
+      mPaint.setColor(mColor.pack());
       canvas.drawRect(getBounds(), mPaint);
     }
 

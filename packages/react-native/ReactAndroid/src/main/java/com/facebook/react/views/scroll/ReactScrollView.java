@@ -1151,6 +1151,10 @@ public class ReactScrollView extends ScrollView
     mReactBackgroundManager.setBackgroundColor(color);
   }
 
+  public void setBackgroundColor(long color) {
+    mReactBackgroundManager.setBackgroundColor(color);
+  }
+
   public void setBorderWidth(int position, float width) {
     mReactBackgroundManager.setBorderWidth(position, width);
   }

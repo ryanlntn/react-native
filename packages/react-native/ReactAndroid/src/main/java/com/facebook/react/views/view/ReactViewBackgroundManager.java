@@ -57,6 +57,14 @@ public class ReactViewBackgroundManager {
     }
   }
 
+  public void setBackgroundColor(long color) {
+    if (color == Color.TRANSPARENT && mReactBackgroundDrawable == null) {
+      // don't do anything, no need to allocate ReactBackgroundDrawable for transparent background
+    } else {
+      getOrCreateReactViewBackground().setColor(color);
+    }
+  }
+
   public int getBackgroundColor() {
     return mColor;
   }

@@ -27,13 +27,13 @@ public class ColorPropConverter {
   private static final String ATTR = "attr";
   private static final String ATTR_SEGMENT = "attr/";
 
-  public static Integer getColor(Object value, Context context) {
+  public static Color getColorInstance(Object value, Context context) {
     if (value == null) {
       return null;
     }
 
     if (value instanceof Double) {
-      return ((Double) value).intValue();
+      return Color.valueOf(((Double) value).intValue());
     }
 
     if (context == null) {
@@ -45,8 +45,9 @@ public class ColorPropConverter {
 
       // handle color(space r g b a) value
       if (map.hasKey("space")) {
-        ColorSpace space = ColorSpace
-            .get(map.getString("space") == "display-p3" ? ColorSpace.Named.DISPLAY_P3 : ColorSpace.Named.SRGB);
+        String rawColorSpace = map.getString("space");
+        boolean isDisplayP3 = rawColorSpace.equals("display-p3");
+        ColorSpace space = ColorSpace.get(isDisplayP3 ? ColorSpace.Named.DISPLAY_P3 : ColorSpace.Named.SRGB);
         float r = (float) map.getDouble("r");
         float g = (float) map.getDouble("g");
         float b = (float) map.getDouble("b");
@@ -54,7 +55,7 @@ public class ColorPropConverter {
 
         @ColorLong
         long color = Color.pack(r, g, b, a, space);
-        return Color.valueOf(color).toArgb();
+        return Color.valueOf(color);
       }
 
       ReadableArray resourcePaths = map.getArray(JSON_KEY);
@@ -66,7 +67,7 @@ public class ColorPropConverter {
       for (int i = 0; i < resourcePaths.size(); i++) {
         Integer result = resolveResourcePath(context, resourcePaths.getString(i));
         if (result != null) {
-          return result;
+          return Color.valueOf(result);
         }
       }
 
@@ -78,6 +79,14 @@ public class ColorPropConverter {
 
     throw new JSApplicationCausedNativeException(
         "ColorValue: the value must be a number or Object.");
+  }
+
+  public static Integer getColor(Object value, Context context) {
+    Color color = getColorInstance(value, context);
+    if (color == null) {
+      return null;
+    }
+    return color.toArgb();
   }
 
   public static Integer getColor(Object value, Context context, int defaultInt) {

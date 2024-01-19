@@ -8,6 +8,7 @@
 package com.facebook.react.uimanager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import androidx.annotation.Nullable;
 import com.facebook.common.logging.FLog;
@@ -194,6 +195,7 @@ import java.util.Map;
   private static class ColorPropSetter extends PropSetter {
 
     private final int mDefaultValue;
+    private ReactProp mProp = null;
 
     public ColorPropSetter(ReactProp prop, Method setter) {
       this(prop, setter, 0);
@@ -202,6 +204,7 @@ import java.util.Map;
     public ColorPropSetter(ReactProp prop, Method setter, int defaultValue) {
       super(prop, "mixed", setter);
       mDefaultValue = defaultValue;
+      mProp = prop;
     }
 
     public ColorPropSetter(ReactPropGroup prop, Method setter, int index, int defaultValue) {
@@ -215,7 +218,12 @@ import java.util.Map;
         return mDefaultValue;
       }
 
-      return ColorPropConverter.getColor(value, context);
+      FLog.e("RYAN", "ColorPropSetter.getValueOrDefault value: " + value + " prop: " + mPropName);
+      Color color = ColorPropConverter.getColorInstance(value, context);
+      if (mPropName.equals("backgroundColor")) {
+        return color.pack();
+      }
+      return color.toArgb();
     }
   }
 
@@ -331,9 +339,11 @@ import java.util.Map;
   }
 
   private static class BoxedColorPropSetter extends PropSetter {
+    private ReactProp mProp = null;
 
     public BoxedColorPropSetter(ReactProp prop, Method setter) {
       super(prop, "mixed", setter);
+      mProp = prop;
     }
 
     public BoxedColorPropSetter(ReactPropGroup prop, Method setter, int index) {
@@ -343,7 +353,13 @@ import java.util.Map;
     @Override
     protected @Nullable Object getValueOrDefault(Object value, Context context) {
       if (value != null) {
-        return ColorPropConverter.getColor(value, context);
+        FLog.e("RYAN", "BoxedColorPropSetter.getValueOrDefault value: " + value + " propName: " + mPropName);
+        
+        Color color = ColorPropConverter.getColorInstance(value, context);
+        if (mPropName.equals("backgroundColor")) {
+          return color.pack();
+        }
+        return color.toArgb();
       }
       return null;
     }
@@ -454,6 +470,8 @@ import java.util.Map;
       return new ArrayPropSetter(annotation, method);
     } else if (propTypeClass == ReadableMap.class) {
       return new MapPropSetter(annotation, method);
+    } else if ((propTypeClass == long.class || propTypeClass == Long.class) && "Color".equals(annotation.customType())) {
+      return new BoxedColorPropSetter(annotation, method);
     } else {
       throw new RuntimeException(
           "Unrecognized type: "
@@ -499,6 +517,10 @@ import java.util.Map;
         } else {
           props.put(names[i], new BoxedIntPropSetter(annotation, method, i));
         }
+      }
+    } else if ((propTypeClass == long.class || propTypeClass == Long.class) && "Color".equals(annotation.customType())) {
+      for (int i = 0; i < names.length; i++) {
+        props.put(names[i], new BoxedColorPropSetter(annotation, method, i));
       }
     } else {
       throw new RuntimeException(
