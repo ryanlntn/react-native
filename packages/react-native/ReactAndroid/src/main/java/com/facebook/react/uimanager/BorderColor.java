@@ -119,7 +119,7 @@ public class BorderColor {
                 || spacingType == BLOCK
                 || spacingType == BLOCK_END
                 || spacingType == BLOCK_START
-            ? -1
+            ? 0
             : mDefaultValue);
 
     if (mValueFlags == 0) {
@@ -173,6 +173,6 @@ public class BorderColor {
   }
 
   private static long[] newFullBorderColorArray() {
-    return new long[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    return new long[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   }
 }

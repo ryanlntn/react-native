@@ -103,7 +103,8 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   /* Used by all types of background and for drawing borders */
   private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-  private Color mColor = Color.valueOf(Color.TRANSPARENT);
+  private long mColor = Color.pack(Color.TRANSPARENT);
+  private int mAlpha = 255;
 
   // There is a small gap between the edges of adjacent paths
   // such as between the mBackgroundColorRenderPath and its border.
@@ -168,16 +169,22 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @Override
   public void setAlpha(int alpha) {
-    int currentAlpha = getAlpha();
-    if (alpha != currentAlpha) {
-      mColor = Color.valueOf(mColor.red(), mColor.green(), mColor.blue(), alpha / 255f);
+    if (alpha != mAlpha) {
+      mAlpha = alpha;
       invalidateSelf();
     }
   }
 
   @Override
   public int getAlpha() {
-    return Color.alpha(mColor.toArgb());
+    return mAlpha;
+  }
+
+  public long useColor() {
+    Color color = Color.valueOf(mColor);
+    float colorAlpha = color.alpha();
+    float combinedAlpha = colorAlpha * (mAlpha / 255.0f);
+    return Color.pack(color.red(), color.green(), color.blue(), combinedAlpha, color.getColorSpace());
   }
 
   @Override
@@ -187,7 +194,7 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @Override
   public int getOpacity() {
-    float alpha = mColor.alpha();
+    float alpha = Color.valueOf(mColor).alpha() * (mAlpha / 255.0f);
     if (alpha == 1.0f) {
       return PixelFormat.OPAQUE;
     } else if (alpha == 0.0f) {
@@ -295,16 +302,13 @@ public class ReactViewBackgroundDrawable extends Drawable {
     return radius;
   }
 
-  public void setColor(Color color) {
-    mColor = color;
-    invalidateSelf();
-  }
   public void setColor(int color) {
-    mColor = Color.valueOf(color);
+    mColor = Color.pack(color);
     invalidateSelf();
   }
+
   public void setColor(long color) {
-    mColor = Color.valueOf(color);
+    mColor = color;
     invalidateSelf();
   }
 
@@ -329,7 +333,7 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @VisibleForTesting
   public int getColor() {
-    return mColor.toArgb();
+    return Color.valueOf(mColor).toArgb();
   }
 
   private void drawRoundedBackgroundWithBorders(Canvas canvas) {
@@ -340,8 +344,9 @@ public class ReactViewBackgroundDrawable extends Drawable {
     canvas.clipPath(mOuterClipPathForBorderRadius, Region.Op.INTERSECT);
 
     // Draws the View without its border first (with background color fill)
-    if (mColor.alpha() != 0.0f) { // color is not transparent
-      mPaint.setColor(mColor.pack());
+    long color = useColor();
+    if (Color.alpha(color) != 0.0f) { // color is not transparent
+      mPaint.setColor(color);
       mPaint.setStyle(Paint.Style.FILL);
       canvas.drawPath(mBackgroundColorRenderPath, mPaint);
     }
@@ -384,13 +389,12 @@ public class ReactViewBackgroundDrawable extends Drawable {
           && colorRight == borderColor
           && colorBottom == borderColor) {
         if (fullBorderWidth > 0) {
-          float combinedAlpha = Color.valueOf(borderColor).alpha() * mColor.alpha();
           long alphaAdjustedBorderColor = 
             Color.pack(
               Color.red(borderColor), 
               Color.green(borderColor), 
               Color.blue(borderColor), 
-              combinedAlpha, 
+              Color.alpha(borderColor) * (mAlpha / 255.0f),
               Color.colorSpace(borderColor));
           mPaint.setColor(alphaAdjustedBorderColor);
           mPaint.setStyle(Paint.Style.STROKE);
@@ -1137,8 +1141,9 @@ public class ReactViewBackgroundDrawable extends Drawable {
   private void drawRectangularBackgroundWithBorders(Canvas canvas) {
     mPaint.setStyle(Paint.Style.FILL);
 
-    if (mColor.alpha() != 0.0f) { // color is not transparent
-      mPaint.setColor(mColor.pack());
+    long color = useColor();
+    if (Color.alpha(color) != 0.0f) { // color is not transparent
+      mPaint.setColor(color);
       canvas.drawRect(getBounds(), mPaint);
     }
 
@@ -1380,8 +1385,8 @@ public class ReactViewBackgroundDrawable extends Drawable {
   }
 
   private boolean isBorderColorDefined(int position) {
-    long color = mBorderColor != null ? mBorderColor.get(position) : -1; 
-    return color > -1;
+    long color = mBorderColor != null ? mBorderColor.get(position) : 0; 
+    return color != 0;
   }
 
   public long getBorderColor(int position) {

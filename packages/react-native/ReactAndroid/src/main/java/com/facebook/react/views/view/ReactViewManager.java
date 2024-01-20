@@ -253,7 +253,7 @@ public class ReactViewManager extends ReactClippingViewManager<ReactViewGroup> {
       },
       customType = "Color")
   public void setBorderColor(ReactViewGroup view, int index, Long color) {
-    long borderColor = color == null ? -1 : color;
+    long borderColor = color == null ? 0 : color;
     view.setBorderColor(SPACING_TYPES[index], borderColor);
   }
 

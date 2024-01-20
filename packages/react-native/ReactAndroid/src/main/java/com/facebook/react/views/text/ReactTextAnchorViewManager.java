@@ -181,7 +181,7 @@ public abstract class ReactTextAnchorViewManager<T extends View, C extends React
       },
       customType = "Color")
   public void setBorderColor(ReactTextView view, int index, Long color) {
-    long borderColor = color == null ? -1 : color;
+    long borderColor = color == null ? 0 : color;
     view.setBorderColor(SPACING_TYPES[index], borderColor);
   }
 
