@@ -714,10 +714,11 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
       // fixes underlineColor transparent not working on API 21
       // re-sets the TextInput underlineColor https://bit.ly/3M4alr6
       if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-        int bottomBorderColor = view.getBorderColor(Spacing.BOTTOM);
-        setBorderColor(view, Spacing.START, underlineColor);
-        drawableToMutate.setColorFilter(underlineColor, PorterDuff.Mode.SRC_IN);
-        setBorderColor(view, Spacing.START, bottomBorderColor);
+        // TODO: fix this
+        // long bottomBorderColor = view.getBorderColor(Spacing.BOTTOM);
+        // setBorderColor(view, Spacing.START, underlineColor);
+        // drawableToMutate.setColorFilter(underlineColor, PorterDuff.Mode.SRC_IN);
+        // setBorderColor(view, Spacing.START, bottomBorderColor);
       } else {
         drawableToMutate.setColorFilter(underlineColor, PorterDuff.Mode.SRC_IN);
       }
@@ -1033,11 +1034,9 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
         "borderBottomColor"
       },
       customType = "Color")
-  public void setBorderColor(ReactEditText view, int index, Integer color) {
-    float rgbComponent =
-        color == null ? YogaConstants.UNDEFINED : (float) ((int) color & 0x00FFFFFF);
-    float alphaComponent = color == null ? YogaConstants.UNDEFINED : (float) ((int) color >>> 24);
-    view.setBorderColor(SPACING_TYPES[index], rgbComponent, alphaComponent);
+  public void setBorderColor(ReactEditText view, int index, Long color) {
+    long borderColor = color == null ? -1 : color;
+    view.setBorderColor(SPACING_TYPES[index], borderColor);
   }
 
   @Override

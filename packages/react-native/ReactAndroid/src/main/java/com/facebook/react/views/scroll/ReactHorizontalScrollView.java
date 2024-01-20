@@ -1280,8 +1280,8 @@ public class ReactHorizontalScrollView extends HorizontalScrollView
     mReactBackgroundManager.setBorderWidth(position, width);
   }
 
-  public void setBorderColor(int position, float color, float alpha) {
-    mReactBackgroundManager.setBorderColor(position, color, alpha);
+  public void setBorderColor(int position, long color) {
+    mReactBackgroundManager.setBorderColor(position, color);
   }
 
   public void setBorderRadius(float borderRadius) {

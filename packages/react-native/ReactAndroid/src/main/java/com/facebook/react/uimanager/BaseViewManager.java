@@ -167,7 +167,7 @@ public abstract class BaseViewManager<T extends View, C extends LayoutShadowNode
 
   @Override
   public void setBackgroundColor(@NonNull T view, int backgroundColor) {
-    view.setBackgroundColor((int)backgroundColor);
+    view.setBackgroundColor(backgroundColor);
   }
 
   @ReactProp(

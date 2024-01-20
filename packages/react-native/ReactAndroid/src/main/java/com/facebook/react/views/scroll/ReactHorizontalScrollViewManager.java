@@ -291,11 +291,9 @@ public class ReactHorizontalScrollViewManager extends ViewGroupManager<ReactHori
         "borderBottomColor"
       },
       customType = "Color")
-  public void setBorderColor(ReactHorizontalScrollView view, int index, Integer color) {
-    float rgbComponent =
-        color == null ? YogaConstants.UNDEFINED : (float) ((int) color & 0x00FFFFFF);
-    float alphaComponent = color == null ? YogaConstants.UNDEFINED : (float) ((int) color >>> 24);
-    view.setBorderColor(SPACING_TYPES[index], rgbComponent, alphaComponent);
+  public void setBorderColor(ReactHorizontalScrollView view, int index, Long color) {
+    long borderColor = color == null ? -1 : color;
+    view.setBorderColor(SPACING_TYPES[index], borderColor);
   }
 
   @ReactProp(name = "overflow")

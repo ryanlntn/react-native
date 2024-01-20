@@ -153,9 +153,9 @@ public class ReactImageManager extends SimpleViewManager<ReactImageView> {
   }
 
   @ReactProp(name = "borderColor", customType = "Color")
-  public void setBorderColor(ReactImageView view, @Nullable Integer borderColor) {
+  public void setBorderColor(ReactImageView view, @Nullable Long borderColor) {
     if (borderColor == null) {
-      view.setBorderColor(Color.TRANSPARENT);
+      view.setBorderColor(Color.pack(Color.TRANSPARENT));
     } else {
       view.setBorderColor(borderColor);
     }

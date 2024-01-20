@@ -55,6 +55,12 @@ import androidx.appcompat.widget.SwitchCompat;
             createRippleDrawableColorStateList(color), new ColorDrawable(color), null));
   }
 
+  public void setBackgroundColor(long color) {
+    setBackground(
+        new RippleDrawable(
+            createRippleDrawableColorStateList((int)color), new ColorDrawable((int)color), null));
+  }
+
   void setColor(Drawable drawable, @Nullable Integer color) {
     if (color == null) {
       drawable.clearColorFilter();

@@ -476,6 +476,20 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     }
   }
 
+  public void setBackgroundColor(@Nullable Long color) {
+    // Background color needs to be handled here for virtual nodes so it can be incorporated into
+    // the span. However, it doesn't need to be applied to non-virtual nodes because non-virtual
+    // nodes get mapped to native views and native views get their background colors get set via
+    // {@link BaseViewManager}.
+    if (isVirtual()) {
+      mIsBackgroundColorSet = (color != null);
+      if (mIsBackgroundColorSet) {
+        mBackgroundColor = Color.valueOf(color).toArgb();
+      }
+      markUpdated();
+    }
+  }
+
   @ReactProp(name = ViewProps.ACCESSIBILITY_ROLE)
   public void setAccessibilityRole(@Nullable String accessibilityRole) {
     if (isVirtual()) {

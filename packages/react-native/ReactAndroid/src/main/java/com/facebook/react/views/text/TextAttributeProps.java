@@ -7,6 +7,7 @@
 
 package com.facebook.react.views.text;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.text.Layout;
 import android.text.TextUtils;
@@ -420,6 +421,17 @@ public class TextAttributeProps {
     mIsBackgroundColorSet = (color != null);
     if (mIsBackgroundColorSet) {
       mBackgroundColor = color;
+    }
+    // }
+  }
+
+  private void setBackgroundColor(Long color) {
+    // TODO: Don't apply background color to anchor TextView since it will be applied on the View
+    // directly
+    // if (!isVirtualAnchor()) {
+    mIsBackgroundColorSet = (color != null);
+    if (mIsBackgroundColorSet) {
+      mBackgroundColor = Color.valueOf(color).toArgb();
     }
     // }
   }
