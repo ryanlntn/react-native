@@ -414,6 +414,13 @@ public class TextAttributeProps {
     }
   }
 
+  private void setColor(@Nullable Long color) {
+    mIsColorSet = (color != null);
+    if (mIsColorSet) {
+      mColor = Color.valueOf(color).toArgb();
+    }
+  }
+
   private void setBackgroundColor(Integer color) {
     // TODO: Don't apply background color to anchor TextView since it will be applied on the View
     // directly

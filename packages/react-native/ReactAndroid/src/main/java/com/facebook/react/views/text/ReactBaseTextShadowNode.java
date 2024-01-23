@@ -453,29 +453,15 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   }
 
   @ReactProp(name = ViewProps.COLOR, customType = "Color")
-  public void setColor(@Nullable Integer color) {
+  public void setColor(@Nullable Long color) {
     mIsColorSet = (color != null);
     if (mIsColorSet) {
-      mColor = color;
+      mColor = Color.toArgb(color);
     }
     markUpdated();
   }
 
   @ReactProp(name = ViewProps.BACKGROUND_COLOR, customType = "Color")
-  public void setBackgroundColor(@Nullable Integer color) {
-    // Background color needs to be handled here for virtual nodes so it can be incorporated into
-    // the span. However, it doesn't need to be applied to non-virtual nodes because non-virtual
-    // nodes get mapped to native views and native views get their background colors get set via
-    // {@link BaseViewManager}.
-    if (isVirtual()) {
-      mIsBackgroundColorSet = (color != null);
-      if (mIsBackgroundColorSet) {
-        mBackgroundColor = color;
-      }
-      markUpdated();
-    }
-  }
-
   public void setBackgroundColor(@Nullable Long color) {
     // Background color needs to be handled here for virtual nodes so it can be incorporated into
     // the span. However, it doesn't need to be applied to non-virtual nodes because non-virtual
@@ -484,7 +470,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     if (isVirtual()) {
       mIsBackgroundColorSet = (color != null);
       if (mIsBackgroundColorSet) {
-        mBackgroundColor = Color.valueOf(color).toArgb();
+        mBackgroundColor = Color.toArgb(color);
       }
       markUpdated();
     }
@@ -607,9 +593,9 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   }
 
   @ReactProp(name = PROP_SHADOW_COLOR, defaultInt = DEFAULT_TEXT_SHADOW_COLOR, customType = "Color")
-  public void setTextShadowColor(int textShadowColor) {
+  public void setTextShadowColor(long textShadowColor) {
     if (textShadowColor != mTextShadowColor) {
-      mTextShadowColor = textShadowColor;
+      mTextShadowColor = Color.toArgb(textShadowColor);
       markUpdated();
     }
   }

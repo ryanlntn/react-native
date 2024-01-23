@@ -236,8 +236,8 @@ public class ReactHorizontalScrollViewManager extends ViewGroupManager<ReactHori
    * @param color
    */
   @ReactProp(name = "endFillColor", defaultInt = Color.TRANSPARENT, customType = "Color")
-  public void setBottomFillColor(ReactHorizontalScrollView view, int color) {
-    view.setEndFillColor(color);
+  public void setBottomFillColor(ReactHorizontalScrollView view, long color) {
+    view.setEndFillColor(Color.toArgb(color));
   }
 
   @ReactPropGroup(

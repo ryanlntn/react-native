@@ -7,6 +7,7 @@
 
 package com.facebook.react.views.text;
 
+import android.graphics.Color;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.TextUtils;
@@ -106,12 +107,12 @@ public abstract class ReactTextAnchorViewManager<T extends View, C extends React
   }
 
   @ReactProp(name = "selectionColor", customType = "Color")
-  public void setSelectionColor(ReactTextView view, @Nullable Integer color) {
+  public void setSelectionColor(ReactTextView view, @Nullable Long color) {
     if (color == null) {
       view.setHighlightColor(
           DefaultStyleValuesUtil.getDefaultTextColorHighlight(view.getContext()));
     } else {
-      view.setHighlightColor(color);
+      view.setHighlightColor(Color.toArgb(color));
     }
   }
 

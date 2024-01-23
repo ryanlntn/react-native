@@ -229,11 +229,18 @@ public abstract class BaseViewManager<T extends View, C extends LayoutShadowNode
   }
 
   @Override
-  @ReactProp(name = ViewProps.SHADOW_COLOR, defaultInt = Color.BLACK, customType = "Color")
   public void setShadowColor(@NonNull T view, int shadowColor) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       view.setOutlineAmbientShadowColor(shadowColor);
       view.setOutlineSpotShadowColor(shadowColor);
+    }
+  }
+
+  @ReactProp(name = ViewProps.SHADOW_COLOR, defaultInt = Color.BLACK, customType = "Color")
+  public void setShadowColor(@NonNull T view, long shadowColor) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      view.setOutlineAmbientShadowColor(Color.toArgb(shadowColor));
+      view.setOutlineSpotShadowColor(Color.toArgb(shadowColor));
     }
   }
 

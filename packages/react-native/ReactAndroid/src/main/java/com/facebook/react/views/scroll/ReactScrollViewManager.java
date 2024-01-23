@@ -173,8 +173,8 @@ public class ReactScrollViewManager extends ViewGroupManager<ReactScrollView>
    * @param color
    */
   @ReactProp(name = "endFillColor", defaultInt = Color.TRANSPARENT, customType = "Color")
-  public void setBottomFillColor(ReactScrollView view, int color) {
-    view.setEndFillColor(color);
+  public void setBottomFillColor(ReactScrollView view, long color) {
+    view.setEndFillColor(Color.toArgb(color));
   }
 
   /** Controls overScroll behaviour */

@@ -220,10 +220,7 @@ import java.util.Map;
 
       FLog.e("RYAN", "ColorPropSetter.getValueOrDefault value: " + value + " prop: " + mPropName);
       Color color = ColorPropConverter.getColorInstance(value, context);
-      if (mPropName.equals("backgroundColor") || mPropName.contains("border")) {
-        return color.pack();
-      }
-      return color.toArgb();
+      return color.pack();
     }
   }
 
@@ -356,10 +353,7 @@ import java.util.Map;
         FLog.e("RYAN", "BoxedColorPropSetter.getValueOrDefault value: " + value + " propName: " + mPropName);
         
         Color color = ColorPropConverter.getColorInstance(value, context);
-        if (mPropName.equals("backgroundColor") || mPropName.contains("border")) {
-          return color.pack();
-        }
-        return color.toArgb();
+        return color.pack();
       }
       return null;
     }
