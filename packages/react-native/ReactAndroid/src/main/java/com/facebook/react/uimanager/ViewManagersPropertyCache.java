@@ -218,7 +218,6 @@ import java.util.Map;
         return mDefaultValue;
       }
 
-      FLog.e("RYAN", "ColorPropSetter.getValueOrDefault value: " + value + " prop: " + mPropName);
       Color color = ColorPropConverter.getColorInstance(value, context);
       return color.pack();
     }
@@ -350,8 +349,6 @@ import java.util.Map;
     @Override
     protected @Nullable Object getValueOrDefault(Object value, Context context) {
       if (value != null) {
-        FLog.e("RYAN", "BoxedColorPropSetter.getValueOrDefault value: " + value + " propName: " + mPropName);
-        
         Color color = ColorPropConverter.getColorInstance(value, context);
         return color.pack();
       }

@@ -7,6 +7,7 @@
 
 package com.facebook.react.views.text;
 
+import android.os.Parcel;
 import android.text.style.ForegroundColorSpan;
 
 /*
@@ -15,5 +16,9 @@ import android.text.style.ForegroundColorSpan;
 public class ReactForegroundColorSpan extends ForegroundColorSpan implements ReactSpan {
   public ReactForegroundColorSpan(int color) {
     super(color);
+  }
+
+  public ReactForegroundColorSpan(Parcel colorParcel) {
+    super(colorParcel);
   }
 }

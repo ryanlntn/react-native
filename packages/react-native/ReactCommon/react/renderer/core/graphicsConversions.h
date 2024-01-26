@@ -73,11 +73,47 @@ inline void fromRawValue(
 }
 
 #ifdef ANDROID
-inline int toAndroidRepr(const SharedColor& color) {
-  return *color;
+inline long toAndroidRepr(const SharedColor& c) {
+  ColorComponents components = colorComponentsFromColor(c);
+
+  // Normalize the color components to the range [0, 255]
+  float ratio = 255.0f;
+  int alpha = static_cast<int>(round(components.alpha * ratio)) & 0xff;
+  int red = static_cast<int>(round(components.red * ratio)) & 0xff;
+  int green = static_cast<int>(round(components.green * ratio)) & 0xff;
+  int blue = static_cast<int>(round(components.blue * ratio)) & 0xff;
+
+  // Pack the components into a long value
+  long androidColor = (static_cast<long>(alpha) << 24) |
+                      (static_cast<long>(red) << 16) |
+                      (static_cast<long>(green) << 8) |
+                      static_cast<long>(blue);
+
+  // Combine with color space information
+  // androidColor |= static_cast<long>(colorSpace) << 32;
+
+  return androidColor;
 }
 inline folly::dynamic toDynamic(const SharedColor& color) {
-  return *color;
+  ColorComponents components = colorComponentsFromColor(c);
+
+  // Normalize the color components to the range [0, 255]
+  float ratio = 255.0f;
+  int alpha = static_cast<int>(round(components.alpha * ratio)) & 0xff;
+  int red = static_cast<int>(round(components.red * ratio)) & 0xff;
+  int green = static_cast<int>(round(components.green * ratio)) & 0xff;
+  int blue = static_cast<int>(round(components.blue * ratio)) & 0xff;
+
+  // Pack the components into a long value
+  long androidColor = (static_cast<long>(alpha) << 24) |
+                      (static_cast<long>(red) << 16) |
+                      (static_cast<long>(green) << 8) |
+                      static_cast<long>(blue);
+
+  // Combine with color space information
+  // androidColor |= static_cast<long>(colorSpace) << 32;
+
+  return androidColor;
 }
 #endif
 

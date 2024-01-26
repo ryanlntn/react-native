@@ -92,7 +92,7 @@ inline void putOptionalColor(
     MapBufferBuilder& builder,
     MapBuffer::Key key,
     const std::optional<SharedColor>& color) {
-  builder.putInt(key, color.has_value() ? toAndroidRepr(color.value()) : -1);
+  builder.putLong(key, color.has_value() ? toAndroidRepr(color.value()) : -1);
 }
 
 inline MapBuffer convertBorderColors(const CascadedBorderColors& colors) {

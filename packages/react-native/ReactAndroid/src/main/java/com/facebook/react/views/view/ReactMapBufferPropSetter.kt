@@ -114,7 +114,7 @@ object ReactMapBufferPropSetter {
   private const val NATIVE_DRAWABLE_BORDERLESS = 3
   private const val NATIVE_DRAWABLE_RIPPLE_RADIUS = 4
 
-  private const val UNDEF_COLOR = Int.MAX_VALUE
+  private const val UNDEF_COLOR = Long.MAX_VALUE
 
   fun setProps(view: ReactViewGroup, viewManager: ReactViewManager, props: MapBuffer) {
     for (entry in props) {
@@ -151,7 +151,7 @@ object ReactMapBufferPropSetter {
         }
         VP_BG_COLOR -> {
           // TODO: color for some reason can be object in Java but not in C++
-          viewManager.backgroundColor(view, entry.intValue)
+          viewManager.backgroundColor(view, entry.longValue)
         }
         VP_FG_COLOR -> {
           // Prop not used on Android?
@@ -242,7 +242,7 @@ object ReactMapBufferPropSetter {
         }
         VP_SHADOW_COLOR -> {
           // TODO: color for some reason can be object in Java but not in C++
-          viewManager.shadowColor(view, entry.intValue)
+          viewManager.shadowColor(view, entry.longValue)
         }
         VP_TEST_ID -> {
           viewManager.setTestId(view, entry.stringValue.takeIf { it.isNotEmpty() })
@@ -342,8 +342,8 @@ object ReactMapBufferPropSetter {
     setBackfaceVisibility(view, stringName)
   }
 
-  private fun ReactViewManager.backgroundColor(view: ReactViewGroup, value: Int) {
-    val color = value.takeIf { it != UNDEF_COLOR } ?: Color.TRANSPARENT
+  private fun ReactViewManager.backgroundColor(view: ReactViewGroup, value: Long) {
+    val color = value.takeIf { it != UNDEF_COLOR } ?: Color.pack(Color.TRANSPARENT)
     setBackgroundColor(view, color)
   }
 
@@ -484,8 +484,8 @@ object ReactMapBufferPropSetter {
     setOverflow(view, stringValue)
   }
 
-  private fun ReactViewManager.shadowColor(view: ReactViewGroup, value: Int) {
-    val color = value.takeIf { it != UNDEF_COLOR } ?: Color.BLACK
+  private fun ReactViewManager.shadowColor(view: ReactViewGroup, value: Long) {
+    val color = value.takeIf { it != UNDEF_COLOR } ?: Color.pack(Color.BLACK)
     setShadowColor(view, color)
   }
 

@@ -10,6 +10,7 @@ package com.facebook.react.views.text;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Parcel;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -147,8 +148,10 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     int end = sb.length();
     if (end >= start) {
       if (textShadowNode.mIsColorSet) {
+        Parcel parcel = Parcel.obtain();
+        parcel.writeLong(textShadowNode.mColor);
         ops.add(
-            new SetSpanOperation(start, end, new ReactForegroundColorSpan(textShadowNode.mColor)));
+            new SetSpanOperation(start, end, new ReactForegroundColorSpan(parcel)));
       }
       if (textShadowNode.mIsBackgroundColorSet) {
         ops.add(
@@ -300,7 +303,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   protected TextAttributes mTextAttributes;
 
   protected boolean mIsColorSet = false;
-  protected int mColor;
+  protected long mColor;
   protected boolean mIsBackgroundColorSet = false;
   protected int mBackgroundColor;
 
@@ -317,7 +320,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   protected float mTextShadowOffsetDx = 0;
   protected float mTextShadowOffsetDy = 0;
   protected float mTextShadowRadius = 0;
-  protected int mTextShadowColor = DEFAULT_TEXT_SHADOW_COLOR;
+  protected long mTextShadowColor = Color.pack(DEFAULT_TEXT_SHADOW_COLOR);
 
   protected boolean mIsUnderlineTextDecorationSet = false;
   protected boolean mIsLineThroughTextDecorationSet = false;
@@ -456,7 +459,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   public void setColor(@Nullable Long color) {
     mIsColorSet = (color != null);
     if (mIsColorSet) {
-      mColor = Color.toArgb(color);
+      mColor = color;
     }
     markUpdated();
   }
@@ -595,7 +598,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   @ReactProp(name = PROP_SHADOW_COLOR, defaultInt = DEFAULT_TEXT_SHADOW_COLOR, customType = "Color")
   public void setTextShadowColor(long textShadowColor) {
     if (textShadowColor != mTextShadowColor) {
-      mTextShadowColor = Color.toArgb(textShadowColor);
+      mTextShadowColor = textShadowColor;
       markUpdated();
     }
   }

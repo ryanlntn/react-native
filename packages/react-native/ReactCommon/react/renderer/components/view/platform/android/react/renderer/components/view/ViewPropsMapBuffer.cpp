@@ -49,7 +49,7 @@ void ViewProps::propsDiffMapBuffer(
   }
 
   if (oldProps.backgroundColor != newProps.backgroundColor) {
-    builder.putInt(VP_BG_COLOR, toAndroidRepr(newProps.backgroundColor));
+    builder.putLong(VP_BG_COLOR, toAndroidRepr(newProps.backgroundColor));
   }
 
   if (oldProps.borderCurves != newProps.borderCurves) {
@@ -172,7 +172,7 @@ void ViewProps::propsDiffMapBuffer(
   }
 
   if (oldProps.shadowColor != newProps.shadowColor) {
-    builder.putInt(VP_SHADOW_COLOR, toAndroidRepr(newProps.shadowColor));
+    builder.putLong(VP_SHADOW_COLOR, toAndroidRepr(newProps.shadowColor));
   }
 
   if (oldProps.testId != newProps.testId) {

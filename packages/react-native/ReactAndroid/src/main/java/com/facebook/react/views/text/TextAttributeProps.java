@@ -72,7 +72,7 @@ public class TextAttributeProps {
 
   private static final String PROP_TEXT_TRANSFORM = "textTransform";
 
-  private static final int DEFAULT_TEXT_SHADOW_COLOR = 0x55000000;
+  private static final long DEFAULT_TEXT_SHADOW_COLOR = Color.pack(0x55000000);
   private static final int DEFAULT_JUSTIFICATION_MODE =
       (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) ? 0 : Layout.JUSTIFICATION_MODE_NONE;
   private static final int DEFAULT_BREAK_STRATEGY = Layout.BREAK_STRATEGY_HIGH_QUALITY;
@@ -100,7 +100,7 @@ public class TextAttributeProps {
   protected float mTextShadowOffsetDx = 0;
   protected float mTextShadowOffsetDy = 0;
   protected float mTextShadowRadius = 0;
-  protected int mTextShadowColor = DEFAULT_TEXT_SHADOW_COLOR;
+  protected long mTextShadowColor = DEFAULT_TEXT_SHADOW_COLOR;
 
   protected boolean mIsUnderlineTextDecorationSet = false;
   protected boolean mIsLineThroughTextDecorationSet = false;
@@ -152,10 +152,10 @@ public class TextAttributeProps {
       MapBuffer.Entry entry = iterator.next();
       switch (entry.getKey()) {
         case TA_KEY_FOREGROUND_COLOR:
-          result.setColor(entry.getIntValue());
+          result.setColor(entry.getLongValue());
           break;
         case TA_KEY_BACKGROUND_COLOR:
-          result.setBackgroundColor(entry.getIntValue());
+          result.setBackgroundColor(entry.getLongValue());
           break;
         case TA_KEY_OPACITY:
           break;
@@ -200,7 +200,7 @@ public class TextAttributeProps {
           result.setTextShadowRadius((float) entry.getDoubleValue());
           break;
         case TA_KEY_TEXT_SHADOW_COLOR:
-          result.setTextShadowColor(entry.getIntValue());
+          result.setTextShadowColor(entry.getLongValue());
           break;
         case TA_KEY_TEXT_SHADOW_OFFSET_DX:
           result.setTextShadowOffsetDx((float) entry.getDoubleValue());
@@ -239,14 +239,15 @@ public class TextAttributeProps {
     result.setLetterSpacing(getFloatProp(props, ViewProps.LETTER_SPACING, Float.NaN));
     result.setAllowFontScaling(getBooleanProp(props, ViewProps.ALLOW_FONT_SCALING, true));
     result.setFontSize(getFloatProp(props, ViewProps.FONT_SIZE, UNSET));
-    result.setColor(props.hasKey(ViewProps.COLOR) ? props.getInt(ViewProps.COLOR, 0) : null);
+    // result.setColor(props.hasKey(ViewProps.COLOR) ? props.getInt(ViewProps.COLOR, 0) : null);
+    result.setColor(getLongProp(props, ViewProps.COLOR, 0));
     result.setColor(
         props.hasKey(ViewProps.FOREGROUND_COLOR)
-            ? props.getInt(ViewProps.FOREGROUND_COLOR, 0)
+            ? props.getLong(ViewProps.FOREGROUND_COLOR, 0)
             : null);
     result.setBackgroundColor(
         props.hasKey(ViewProps.BACKGROUND_COLOR)
-            ? props.getInt(ViewProps.BACKGROUND_COLOR, 0)
+            ? props.getLong(ViewProps.BACKGROUND_COLOR, 0)
             : null);
     result.setFontFamily(getStringProp(props, ViewProps.FONT_FAMILY));
     result.setFontWeight(getStringProp(props, ViewProps.FONT_WEIGHT));
@@ -257,7 +258,7 @@ public class TextAttributeProps {
     result.setTextShadowOffset(
         props.hasKey(PROP_SHADOW_OFFSET) ? props.getMap(PROP_SHADOW_OFFSET) : null);
     result.setTextShadowRadius(getFloatProp(props, PROP_SHADOW_RADIUS, 1));
-    result.setTextShadowColor(getIntProp(props, PROP_SHADOW_COLOR, DEFAULT_TEXT_SHADOW_COLOR));
+    result.setTextShadowColor(getLongProp(props, PROP_SHADOW_COLOR, DEFAULT_TEXT_SHADOW_COLOR));
     result.setTextTransform(getStringProp(props, PROP_TEXT_TRANSFORM));
     result.setLayoutDirection(getStringProp(props, ViewProps.LAYOUT_DIRECTION));
     result.setAccessibilityRole(getStringProp(props, ViewProps.ACCESSIBILITY_ROLE));
@@ -321,6 +322,14 @@ public class TextAttributeProps {
   private static int getIntProp(ReactStylesDiffMap mProps, String name, int defaultvalue) {
     if (mProps.hasKey(name)) {
       return mProps.getInt(name, defaultvalue);
+    } else {
+      return defaultvalue;
+    }
+  }
+
+  private static long getLongProp(ReactStylesDiffMap mProps, String name, long defaultvalue) {
+    if (mProps.hasKey(name)) {
+      return mProps.getLong(name, defaultvalue);
     } else {
       return defaultvalue;
     }
@@ -622,7 +631,7 @@ public class TextAttributeProps {
     }
   }
 
-  private void setTextShadowColor(int textShadowColor) {
+  private void setTextShadowColor(long textShadowColor) {
     if (textShadowColor != mTextShadowColor) {
       mTextShadowColor = textShadowColor;
     }
