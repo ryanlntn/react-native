@@ -81,7 +81,7 @@ public class TextAttributeProps {
   protected float mLineHeight = Float.NaN;
   protected boolean mIsColorSet = false;
   protected boolean mAllowFontScaling = true;
-  protected int mColor;
+  protected long mColor;
   protected boolean mIsBackgroundColorSet = false;
   protected int mBackgroundColor;
 
@@ -239,7 +239,6 @@ public class TextAttributeProps {
     result.setLetterSpacing(getFloatProp(props, ViewProps.LETTER_SPACING, Float.NaN));
     result.setAllowFontScaling(getBooleanProp(props, ViewProps.ALLOW_FONT_SCALING, true));
     result.setFontSize(getFloatProp(props, ViewProps.FONT_SIZE, UNSET));
-    // result.setColor(props.hasKey(ViewProps.COLOR) ? props.getInt(ViewProps.COLOR, 0) : null);
     result.setColor(getLongProp(props, ViewProps.COLOR, 0));
     result.setColor(
         props.hasKey(ViewProps.FOREGROUND_COLOR)
@@ -416,29 +415,11 @@ public class TextAttributeProps {
     mFontSize = (int) fontSize;
   }
 
-  private void setColor(@Nullable Integer color) {
+  private void setColor(@Nullable Long color) {
     mIsColorSet = (color != null);
     if (mIsColorSet) {
       mColor = color;
     }
-  }
-
-  private void setColor(@Nullable Long color) {
-    mIsColorSet = (color != null);
-    if (mIsColorSet) {
-      mColor = Color.valueOf(color).toArgb();
-    }
-  }
-
-  private void setBackgroundColor(Integer color) {
-    // TODO: Don't apply background color to anchor TextView since it will be applied on the View
-    // directly
-    // if (!isVirtualAnchor()) {
-    mIsBackgroundColorSet = (color != null);
-    if (mIsBackgroundColorSet) {
-      mBackgroundColor = color;
-    }
-    // }
   }
 
   private void setBackgroundColor(Long color) {
