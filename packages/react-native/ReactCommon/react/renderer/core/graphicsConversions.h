@@ -75,24 +75,31 @@ inline void fromRawValue(
 #ifdef ANDROID
 inline int64_t toAndroidRepr(const SharedColor& color) {
   ColorComponents components = colorComponentsFromColor(color);
-
-  // Normalize the color components to the range [0, 255]
-  float ratio = 255.0f;
-  int alpha = static_cast<int>(round(components.alpha * ratio)) & 0xff;
-  int red = static_cast<int>(round(components.red * ratio)) & 0xff;
-  int green = static_cast<int>(round(components.green * ratio)) & 0xff;
-  int blue = static_cast<int>(round(components.blue * ratio)) & 0xff;
-
-  // Pack the components into a long value
-  long androidColor = (static_cast<long>(alpha) << 24) |
-                      (static_cast<long>(red) << 16) |
-                      (static_cast<long>(green) << 8) |
-                      static_cast<long>(blue);
-
-  // Combine with color space information
-  // androidColor |= static_cast<long>(colorSpace) << 32;
-
-  return androidColor;
+  if (components.colorSpace == ColorSpace::DisplayP3) {
+    int ratio = 15360;
+    int red = static_cast<int>(round(components.red * ratio)) & 0xffff;
+    int green = static_cast<int>(round(components.green * ratio)) & 0xffff;
+    int blue = static_cast<int>(round(components.blue * ratio)) & 0xffff;
+    int alpha = static_cast<int>(round(components.alpha * 0x3ff)) & 0x3ff;
+    int colorSpace = 7;
+    int64_t androidColor = (static_cast<int64_t>(red) << 48) |
+                          (static_cast<int64_t>(green) << 32) |
+                          (static_cast<int64_t>(blue) << 16) |
+                          (static_cast<int64_t>(alpha) << 6) |
+                          static_cast<int64_t>(colorSpace);
+    return androidColor;
+  } else {
+    int ratio = 255;
+    int alpha = static_cast<int>(round(components.alpha * ratio)) & 0xff;
+    int red = static_cast<int>(round(components.red * ratio)) & 0xff;
+    int green = static_cast<int>(round(components.green * ratio)) & 0xff;
+    int blue = static_cast<int>(round(components.blue * ratio)) & 0xff;
+    int64_t androidColor = (static_cast<int64_t>(alpha) << 56) |
+                          (static_cast<int64_t>(red) << 48) |
+                          (static_cast<int64_t>(green) << 40) |
+                          (static_cast<int64_t>(blue) << 32);
+    return androidColor;
+  }
 }
 inline folly::dynamic toDynamic(const SharedColor& color) {
   return toAndroidRepr(color);
