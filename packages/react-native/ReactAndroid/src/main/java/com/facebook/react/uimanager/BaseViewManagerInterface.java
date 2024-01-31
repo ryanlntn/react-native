@@ -50,6 +50,7 @@ public interface BaseViewManagerInterface<T extends View> {
   void setElevation(T view, float elevation);
 
   void setShadowColor(T view, int shadowColor);
+  void setShadowColor(T view, long shadowColor);
 
   void setImportantForAccessibility(T view, @Nullable String importantForAccessibility);
 

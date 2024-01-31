@@ -444,6 +444,8 @@ import java.util.Map;
         return new ColorPropSetter(annotation, method, annotation.defaultInt());
       }
       return new IntPropSetter(annotation, method, annotation.defaultInt());
+    }  else if (propTypeClass == long.class && "Color".equals(annotation.customType())) {
+      return new ColorPropSetter(annotation, method, annotation.defaultInt());
     } else if (propTypeClass == float.class) {
       return new FloatPropSetter(annotation, method, annotation.defaultFloat());
     } else if (propTypeClass == double.class) {
@@ -457,12 +459,12 @@ import java.util.Map;
         return new BoxedColorPropSetter(annotation, method);
       }
       return new BoxedIntPropSetter(annotation, method);
+    } else if (propTypeClass == Long.class && "Color".equals(annotation.customType())) {
+      return new BoxedColorPropSetter(annotation, method);
     } else if (propTypeClass == ReadableArray.class) {
       return new ArrayPropSetter(annotation, method);
     } else if (propTypeClass == ReadableMap.class) {
       return new MapPropSetter(annotation, method);
-    } else if ((propTypeClass == long.class || propTypeClass == Long.class) && "Color".equals(annotation.customType())) {
-      return new BoxedColorPropSetter(annotation, method);
     } else {
       throw new RuntimeException(
           "Unrecognized type: "
@@ -492,6 +494,10 @@ import java.util.Map;
           props.put(names[i], new IntPropSetter(annotation, method, i, annotation.defaultInt()));
         }
       }
+    } else if (propTypeClass == long.class && "Color".equals(annotation.customType())) {
+      for (int i = 0; i < names.length; i++) {
+        props.put(names[i], new ColorPropSetter(annotation, method, i, annotation.defaultInt()));
+      }
     } else if (propTypeClass == float.class) {
       for (int i = 0; i < names.length; i++) {
         props.put(names[i], new FloatPropSetter(annotation, method, i, annotation.defaultFloat()));
@@ -509,7 +515,7 @@ import java.util.Map;
           props.put(names[i], new BoxedIntPropSetter(annotation, method, i));
         }
       }
-    } else if ((propTypeClass == long.class || propTypeClass == Long.class) && "Color".equals(annotation.customType())) {
+    } else if (propTypeClass == Long.class && "Color".equals(annotation.customType())) {
       for (int i = 0; i < names.length; i++) {
         props.put(names[i], new BoxedColorPropSetter(annotation, method, i));
       }

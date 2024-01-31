@@ -172,28 +172,29 @@ public abstract class BaseViewManager<T extends View, C extends LayoutShadowNode
 
   @ReactProp(
     name = ViewProps.BACKGROUND_COLOR,
+    defaultInt = Color.TRANSPARENT,
     customType = "Color")
   public void setBackgroundColor(@NonNull T view, long backgroundColor) {
-    FLog.e("RYAN", "long BaseViewManager.setBackgroundColor: " + backgroundColor);
+    // FLog.e("RYAN", "long BaseViewManager.setBackgroundColor: " + backgroundColor);
 
     // Check if the view class has a setBackgroundColor(long) method
     try {
         Method setBackgroundColorMethod = view.getClass().getMethod("setBackgroundColor", long.class);
-        FLog.e("RYAN", "setBackgroundColor(long) method was found in the view class");
+        // FLog.e("RYAN", "setBackgroundColor(long) method was found in the view class");
 
         // If the method is found, invoke it
         setBackgroundColorMethod.invoke(view, backgroundColor);
 
     } catch (NoSuchMethodException e) {
         // Log or handle the case where the method doesn't exist
-        FLog.e("RYAN", "setBackgroundColor(long) method not found in the view class");
+        // FLog.e("RYAN", "setBackgroundColor(long) method not found in the view class");
         
         // Fallback to the existing code with casting to int
         view.setBackgroundColor((int) backgroundColor);
 
     } catch (Exception e) {
         // Handle other reflection-related exceptions
-        FLog.e("RYAN", "Error invoking setBackgroundColor(long): " + e.getMessage());
+        // FLog.e("RYAN", "Error invoking setBackgroundColor(long): " + e.getMessage());
     }
   }
 

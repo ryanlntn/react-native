@@ -397,7 +397,7 @@ export default class AnimatedInterpolation<
         if (typeof processedColor === 'number') {
           outputType = 'color';
           return processedColor;
-        } else if (processedColor.hasOwnProperty('space')) {
+        } else if (processedColor?.hasOwnProperty('space')) {
           const {r, g, b, a} = processedColor;
           const reprocessedColor = processColor(
             `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${a})`,
