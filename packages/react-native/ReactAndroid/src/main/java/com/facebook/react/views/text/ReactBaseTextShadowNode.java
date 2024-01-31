@@ -148,10 +148,8 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     int end = sb.length();
     if (end >= start) {
       if (textShadowNode.mIsColorSet) {
-        Parcel parcel = Parcel.obtain();
-        parcel.writeLong(textShadowNode.mColor);
         ops.add(
-            new SetSpanOperation(start, end, new ReactForegroundColorSpan(parcel)));
+            new SetSpanOperation(start, end, new ReactForegroundColorSpan(textShadowNode.mColor)));
       }
       if (textShadowNode.mIsBackgroundColorSet) {
         ops.add(
