@@ -7,12 +7,10 @@
 
 package com.facebook.react.views.text;
 
-import androidx.annotation.NonNull;
 import android.graphics.Color;
-import android.os.Parcel;
 import android.text.style.ForegroundColorSpan;
 import android.text.TextPaint;
-import com.facebook.common.logging.FLog;
+import androidx.annotation.NonNull;
 
 /*
  * Wraps {@link ForegroundColorSpan} as a {@link ReactSpan}.

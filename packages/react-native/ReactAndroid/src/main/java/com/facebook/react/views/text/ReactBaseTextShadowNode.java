@@ -303,7 +303,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   protected boolean mIsColorSet = false;
   protected long mColor;
   protected boolean mIsBackgroundColorSet = false;
-  protected int mBackgroundColor;
+  protected long mBackgroundColor;
 
   protected @Nullable AccessibilityRole mAccessibilityRole = null;
   protected @Nullable Role mRole = null;
@@ -471,7 +471,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     if (isVirtual()) {
       mIsBackgroundColorSet = (color != null);
       if (mIsBackgroundColorSet) {
-        mBackgroundColor = Color.toArgb(color);
+        mBackgroundColor = color;
       }
       markUpdated();
     }

@@ -83,7 +83,7 @@ public class TextAttributeProps {
   protected boolean mAllowFontScaling = true;
   protected long mColor;
   protected boolean mIsBackgroundColorSet = false;
-  protected int mBackgroundColor;
+  protected long mBackgroundColor;
 
   protected int mNumberOfLines = UNSET;
   protected int mFontSize = UNSET;
@@ -428,7 +428,7 @@ public class TextAttributeProps {
     // if (!isVirtualAnchor()) {
     mIsBackgroundColorSet = (color != null);
     if (mIsBackgroundColorSet) {
-      mBackgroundColor = Color.valueOf(color).toArgb();
+      mBackgroundColor = color;
     }
     // }
   }
