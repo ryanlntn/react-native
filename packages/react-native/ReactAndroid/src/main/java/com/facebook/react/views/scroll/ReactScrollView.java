@@ -1012,6 +1012,14 @@ public class ReactScrollView extends ScrollView
     }
   }
 
+  public void setEndFillColor(long color) {
+    int useColor = Color.toArgb(color);
+    if (useColor != mEndFillColor) {
+      mEndFillColor = useColor;
+      mEndBackground = new ColorDrawable(mEndFillColor);
+    }
+  }
+
   @Override
   protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
     if (mScroller != null && mContentView != null) {
