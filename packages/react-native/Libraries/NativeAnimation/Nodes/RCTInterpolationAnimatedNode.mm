@@ -150,7 +150,7 @@ NSString *RCTInterpolateString(
   CGFloat inputValue = _parentNode.value;
   switch (_outputType) {
     case RCTInterpolationOutputColor:
-      _outputvalue = @(RCTInterpolateColorInRange(inputValue, _inputRange, _outputRange));
+      _outputvalue = RCTInterpolateColorInRange(inputValue, _inputRange, _outputRange);
       break;
     case RCTInterpolationOutputString:
       _outputvalue = RCTInterpolateString(

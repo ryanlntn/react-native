@@ -21,6 +21,7 @@ import com.facebook.react.views.view.ColorUtil;
 
   private final NativeAnimatedNodesManager mNativeAnimatedNodesManager;
   private final ReactApplicationContext mReactApplicationContext;
+  private String mSpace;
   private int mRNodeId;
   private int mGNodeId;
   private int mBNodeId;
@@ -45,15 +46,18 @@ import com.facebook.react.views.view.ColorUtil;
     ValueAnimatedNode bNode = (ValueAnimatedNode) mNativeAnimatedNodesManager.getNodeById(mBNodeId);
     ValueAnimatedNode aNode = (ValueAnimatedNode) mNativeAnimatedNodesManager.getNodeById(mANodeId);
 
-    double r = rNode.getValue();
-    double g = gNode.getValue();
-    double b = bNode.getValue();
+    int multiplier = mSpace != null ? 255 : 1;
+
+    double r = rNode.getValue() * multiplier;
+    double g = gNode.getValue() * multiplier;
+    double b = bNode.getValue() * multiplier;
     double a = aNode.getValue();
 
     return ColorUtil.normalize(r, g, b, a);
   }
 
   public void onUpdateConfig(ReadableMap config) {
+    mSpace = config.getString("space");
     mRNodeId = config.getInt("r");
     mGNodeId = config.getInt("g");
     mBNodeId = config.getInt("b");

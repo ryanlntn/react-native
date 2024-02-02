@@ -10,6 +10,7 @@ package com.facebook.react.views.text;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Parcel;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -300,9 +301,9 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   protected TextAttributes mTextAttributes;
 
   protected boolean mIsColorSet = false;
-  protected int mColor;
+  protected long mColor;
   protected boolean mIsBackgroundColorSet = false;
-  protected int mBackgroundColor;
+  protected long mBackgroundColor;
 
   protected @Nullable AccessibilityRole mAccessibilityRole = null;
   protected @Nullable Role mRole = null;
@@ -317,7 +318,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   protected float mTextShadowOffsetDx = 0;
   protected float mTextShadowOffsetDy = 0;
   protected float mTextShadowRadius = 0;
-  protected int mTextShadowColor = DEFAULT_TEXT_SHADOW_COLOR;
+  protected long mTextShadowColor = Color.pack(DEFAULT_TEXT_SHADOW_COLOR);
 
   protected boolean mIsUnderlineTextDecorationSet = false;
   protected boolean mIsLineThroughTextDecorationSet = false;
@@ -453,7 +454,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   }
 
   @ReactProp(name = ViewProps.COLOR, customType = "Color")
-  public void setColor(@Nullable Integer color) {
+  public void setColor(@Nullable Long color) {
     mIsColorSet = (color != null);
     if (mIsColorSet) {
       mColor = color;
@@ -462,7 +463,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   }
 
   @ReactProp(name = ViewProps.BACKGROUND_COLOR, customType = "Color")
-  public void setBackgroundColor(@Nullable Integer color) {
+  public void setBackgroundColor(@Nullable Long color) {
     // Background color needs to be handled here for virtual nodes so it can be incorporated into
     // the span. However, it doesn't need to be applied to non-virtual nodes because non-virtual
     // nodes get mapped to native views and native views get their background colors get set via
@@ -593,7 +594,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   }
 
   @ReactProp(name = PROP_SHADOW_COLOR, defaultInt = DEFAULT_TEXT_SHADOW_COLOR, customType = "Color")
-  public void setTextShadowColor(int textShadowColor) {
+  public void setTextShadowColor(long textShadowColor) {
     if (textShadowColor != mTextShadowColor) {
       mTextShadowColor = textShadowColor;
       markUpdated();

@@ -109,6 +109,7 @@ function isRgbaAnimatedValue(value: any): boolean {
 }
 
 export default class AnimatedColor extends AnimatedWithChildren {
+  space: ?string;
   r: AnimatedValue;
   g: AnimatedValue;
   b: AnimatedValue;
@@ -142,6 +143,7 @@ export default class AnimatedColor extends AnimatedWithChildren {
         this.nativeColor = (processedColor: NativeColorValue);
       }
 
+      this.space = initColor.space;
       this.r = new AnimatedValue(initColor.r);
       this.g = new AnimatedValue(initColor.g);
       this.b = new AnimatedValue(initColor.b);
@@ -266,6 +268,10 @@ export default class AnimatedColor extends AnimatedWithChildren {
   __getValue(): ColorValue {
     if (this.nativeColor != null) {
       return this.nativeColor;
+    } else if (this.space) {
+      return `color(${
+        this.space
+      } ${this.r.__getValue()} ${this.g.__getValue()} ${this.b.__getValue()} / ${this.a.__getValue()})`;
     } else {
       return `rgba(${this.r.__getValue()}, ${this.g.__getValue()}, ${this.b.__getValue()}, ${this.a.__getValue()})`;
     }
@@ -310,6 +316,7 @@ export default class AnimatedColor extends AnimatedWithChildren {
   __getNativeConfig(): {...} {
     return {
       type: 'color',
+      space: this.space,
       r: this.r.__getNativeTag(),
       g: this.g.__getNativeTag(),
       b: this.b.__getNativeTag(),

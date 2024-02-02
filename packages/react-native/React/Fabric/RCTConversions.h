@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <React/RCTConvert.h>
 #import <UIKit/UIKit.h>
 
 #import <react/renderer/components/view/AccessibilityPrimitives.h>
@@ -53,7 +54,11 @@ inline UIColor *_Nullable RCTUIColorFromSharedColor(const facebook::react::Share
   }
 
   auto components = facebook::react::colorComponentsFromColor(sharedColor);
-  return [UIColor colorWithRed:components.red green:components.green blue:components.blue alpha:components.alpha];
+  return [RCTConvert createColorFrom:components.red
+                               green:components.green
+                                blue:components.blue
+                               alpha:components.alpha
+                       andColorSpace:(RCTColorSpace)components.colorSpace];
 }
 
 inline CF_RETURNS_RETAINED CGColorRef _Nullable RCTCreateCGColorRefFromSharedColor(

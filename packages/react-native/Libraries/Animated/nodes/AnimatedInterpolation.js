@@ -157,7 +157,9 @@ function mapStringToNumericComponents(
   | {isColor: false, components: $ReadOnlyArray<number | string>} {
   let normalizedColor = normalizeColor(input);
   invariant(
-    normalizedColor == null || typeof normalizedColor !== 'object',
+    normalizedColor == null ||
+      typeof normalizedColor !== 'object' ||
+      normalizedColor.hasOwnProperty('space'),
     'PlatformColors are not supported',
   );
 
@@ -395,6 +397,13 @@ export default class AnimatedInterpolation<
         if (typeof processedColor === 'number') {
           outputType = 'color';
           return processedColor;
+        } else if (processedColor?.hasOwnProperty('space')) {
+          const {r, g, b, a} = processedColor;
+          const reprocessedColor = processColor(
+            `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${a})`,
+          );
+          outputType = 'color';
+          return reprocessedColor;
         } else {
           return NativeAnimatedHelper.transformDataType(value);
         }

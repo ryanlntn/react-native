@@ -9,6 +9,7 @@ package com.facebook.react.uimanager;
 
 import android.view.View;
 import androidx.annotation.Nullable;
+import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -68,6 +69,11 @@ public class ReactStylesDiffMap {
 
   public int getInt(String name, int restoreNullToDefaultValue) {
     return mBackingMap.isNull(name) ? restoreNullToDefaultValue : mBackingMap.getInt(name);
+  }
+
+  public long getLong(String name, long restoreNullToDefaultValue) {
+    // FLog.e("RYAN", "getLong: " + name + " " + mBackingMap.getLong(name));
+    return mBackingMap.isNull(name) ? restoreNullToDefaultValue : mBackingMap.getLong(name);
   }
 
   @Nullable

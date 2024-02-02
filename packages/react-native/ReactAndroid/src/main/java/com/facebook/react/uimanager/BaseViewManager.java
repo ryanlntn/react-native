@@ -30,6 +30,8 @@ import com.facebook.react.uimanager.ReactAccessibilityDelegate.Role;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.PointerEventHelper;
 import com.facebook.react.uimanager.util.ReactFindViewUtil;
+import com.facebook.react.views.view.ReactViewGroup;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -164,12 +166,36 @@ public abstract class BaseViewManager<T extends View, C extends LayoutShadowNode
   }
 
   @Override
-  @ReactProp(
-      name = ViewProps.BACKGROUND_COLOR,
-      defaultInt = Color.TRANSPARENT,
-      customType = "Color")
   public void setBackgroundColor(@NonNull T view, int backgroundColor) {
     view.setBackgroundColor(backgroundColor);
+  }
+
+  @ReactProp(
+    name = ViewProps.BACKGROUND_COLOR,
+    defaultInt = Color.TRANSPARENT,
+    customType = "Color")
+  public void setBackgroundColor(@NonNull T view, long backgroundColor) {
+    // FLog.e("RYAN", "long BaseViewManager.setBackgroundColor: " + backgroundColor);
+
+    // Check if the view class has a setBackgroundColor(long) method
+    try {
+        Method setBackgroundColorMethod = view.getClass().getMethod("setBackgroundColor", long.class);
+        // FLog.e("RYAN", "setBackgroundColor(long) method was found in the view class");
+
+        // If the method is found, invoke it
+        setBackgroundColorMethod.invoke(view, backgroundColor);
+
+    } catch (NoSuchMethodException e) {
+        // Log or handle the case where the method doesn't exist
+        // FLog.e("RYAN", "setBackgroundColor(long) method not found in the view class");
+        
+        // Fallback to the existing code with casting to int
+        view.setBackgroundColor((int) backgroundColor);
+
+    } catch (Exception e) {
+        // Handle other reflection-related exceptions
+        // FLog.e("RYAN", "Error invoking setBackgroundColor(long): " + e.getMessage());
+    }
   }
 
   @Override
@@ -204,11 +230,18 @@ public abstract class BaseViewManager<T extends View, C extends LayoutShadowNode
   }
 
   @Override
-  @ReactProp(name = ViewProps.SHADOW_COLOR, defaultInt = Color.BLACK, customType = "Color")
   public void setShadowColor(@NonNull T view, int shadowColor) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
       view.setOutlineAmbientShadowColor(shadowColor);
       view.setOutlineSpotShadowColor(shadowColor);
+    }
+  }
+
+  @ReactProp(name = ViewProps.SHADOW_COLOR, defaultInt = Color.BLACK, customType = "Color")
+  public void setShadowColor(@NonNull T view, long shadowColor) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      view.setOutlineAmbientShadowColor(Color.toArgb(shadowColor));
+      view.setOutlineSpotShadowColor(Color.toArgb(shadowColor));
     }
   }
 

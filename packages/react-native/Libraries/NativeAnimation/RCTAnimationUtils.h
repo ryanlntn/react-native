@@ -32,7 +32,8 @@ RCT_EXTERN CGFloat RCTInterpolateValueInRange(
     NSString *extrapolateLeft,
     NSString *extrapolateRight);
 
-RCT_EXTERN uint32_t
+// RCT_EXTERN UIColor*
+RCT_EXTERN NSDictionary<NSString *, id>*
 RCTInterpolateColorInRange(CGFloat value, NSArray<NSNumber *> *inputRange, NSArray<UIColor *> *outputRange);
 
 // Represents a color as a int32_t. RGB components are assumed to be in [0-255] range and alpha in [0-1] range

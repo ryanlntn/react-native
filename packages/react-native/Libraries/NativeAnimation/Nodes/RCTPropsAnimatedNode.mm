@@ -130,7 +130,7 @@
     } else if ([parentNode isKindOfClass:[RCTColorAnimatedNode class]]) {
       RCTColorAnimatedNode *colorAnimatedNode = (RCTColorAnimatedNode *)parentNode;
       NSString *property = [self propertyNameForParentTag:parentTag];
-      _propsDictionary[property] = @(colorAnimatedNode.color);
+      _propsDictionary[property] = colorAnimatedNode.color;
     } else if ([parentNode isKindOfClass:[RCTObjectAnimatedNode class]]) {
       RCTObjectAnimatedNode *objectAnimatedNode = (RCTObjectAnimatedNode *)parentNode;
       NSString *property = [self propertyNameForParentTag:parentTag];

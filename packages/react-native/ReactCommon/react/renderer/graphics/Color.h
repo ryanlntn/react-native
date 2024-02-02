@@ -29,6 +29,8 @@ class SharedColor {
 
   SharedColor(Color color) : color_(color) {}
 
+  SharedColor(int color) : color_({color, getDefaultColorSpace()}) {}
+
   Color operator*() const {
     return color_;
   }
