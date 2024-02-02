@@ -48,7 +48,7 @@ import java.util.Locale;
  */
 public class ReactViewBackgroundDrawable extends Drawable {
 
-  private static final long DEFAULT_BORDER_COLOR = Color.valueOf(Color.BLACK).pack();
+  private static final long DEFAULT_BORDER_COLOR = Color.pack(Color.BLACK);
   // ~0 == 0xFFFFFFFF, all bits set to 1.
   private static final int ALL_BITS_SET = ~0;
   // 0 == 0x00000000, all bits set to 0.
@@ -333,7 +333,7 @@ public class ReactViewBackgroundDrawable extends Drawable {
 
   @VisibleForTesting
   public int getColor() {
-    return Color.valueOf(mColor).toArgb();
+    return Color.toArgb(mColor);
   }
 
   private void drawRoundedBackgroundWithBorders(Canvas canvas) {
