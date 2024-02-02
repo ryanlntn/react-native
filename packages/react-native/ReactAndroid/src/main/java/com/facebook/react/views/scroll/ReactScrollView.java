@@ -17,9 +17,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -95,8 +94,7 @@ public class ReactScrollView extends ScrollView
   private boolean mSendMomentumEvents;
   private @Nullable FpsListener mFpsListener = null;
   private @Nullable String mScrollPerfTag;
-  private @Nullable Drawable mEndBackground;
-  private int mEndFillColor = Color.TRANSPARENT;
+  private long mEndFillColor = Color.pack(Color.TRANSPARENT);
   private boolean mDisableIntervalMomentum = false;
   private int mSnapInterval = 0;
   private @Nullable List<Integer> mSnapOffsets;
@@ -620,9 +618,10 @@ public class ReactScrollView extends ScrollView
   public void draw(Canvas canvas) {
     if (mEndFillColor != Color.TRANSPARENT) {
       final View content = getChildAt(0);
-      if (mEndBackground != null && content != null && content.getBottom() < getHeight()) {
-        mEndBackground.setBounds(0, content.getBottom(), getWidth(), getHeight());
-        mEndBackground.draw(canvas);
+      if (content != null && content.getBottom() < getHeight()) {
+        Paint paint = new Paint();
+        paint.setColor(mEndFillColor);
+        canvas.drawRect(0, content.getBottom(), getWidth(), getHeight(), paint);
       }
     }
     getDrawingRect(mRect);
@@ -1005,18 +1004,9 @@ public class ReactScrollView extends ScrollView
     return getHeight();
   }
 
-  public void setEndFillColor(int color) {
+  public void setEndFillColor(long color) {
     if (color != mEndFillColor) {
       mEndFillColor = color;
-      mEndBackground = new ColorDrawable(mEndFillColor);
-    }
-  }
-
-  public void setEndFillColor(long color) {
-    int useColor = Color.toArgb(color);
-    if (useColor != mEndFillColor) {
-      mEndFillColor = useColor;
-      mEndBackground = new ColorDrawable(mEndFillColor);
     }
   }
 

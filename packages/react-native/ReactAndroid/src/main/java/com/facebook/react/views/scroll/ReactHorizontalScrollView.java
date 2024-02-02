@@ -17,9 +17,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
@@ -95,8 +94,7 @@ public class ReactHorizontalScrollView extends HorizontalScrollView
   private boolean mSendMomentumEvents;
   private @Nullable FpsListener mFpsListener = null;
   private @Nullable String mScrollPerfTag;
-  private @Nullable Drawable mEndBackground;
-  private int mEndFillColor = Color.TRANSPARENT;
+  private long mEndFillColor = Color.pack(Color.TRANSPARENT);
   private boolean mDisableIntervalMomentum = false;
   private int mSnapInterval = 0;
   private @Nullable List<Integer> mSnapOffsets;
@@ -779,18 +777,9 @@ public class ReactHorizontalScrollView extends HorizontalScrollView
     return getChildAt(0);
   }
 
-  public void setEndFillColor(int color) {
+  public void setEndFillColor(long color) {
     if (color != mEndFillColor) {
       mEndFillColor = color;
-      mEndBackground = new ColorDrawable(mEndFillColor);
-    }
-  }
-
-  public void setEndFillColor(long color) {
-    int useColor = Color.toArgb(color);
-    if (useColor != mEndFillColor) {
-      mEndFillColor = useColor;
-      mEndBackground = new ColorDrawable(mEndFillColor);
     }
   }
 
@@ -864,9 +853,10 @@ public class ReactHorizontalScrollView extends HorizontalScrollView
   public void draw(Canvas canvas) {
     if (mEndFillColor != Color.TRANSPARENT) {
       final View content = getContentView();
-      if (mEndBackground != null && content != null && content.getRight() < getWidth()) {
-        mEndBackground.setBounds(content.getRight(), 0, getWidth(), getHeight());
-        mEndBackground.draw(canvas);
+      if (content != null && content.getRight() < getWidth()) {
+        Paint paint = new Paint();
+        paint.setColor(mEndFillColor);
+        canvas.drawRect(content.getRight(), 0, getWidth(), getHeight(), paint);
       }
     }
     super.draw(canvas);
