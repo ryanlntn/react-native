@@ -9,6 +9,7 @@ package com.facebook.react.views.switchview;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -58,7 +59,7 @@ import androidx.appcompat.widget.SwitchCompat;
   public void setBackgroundColor(long color) {
     setBackground(
         new RippleDrawable(
-            createRippleDrawableColorStateList((int)color), new ColorDrawable((int)color), null));
+            createRippleDrawableColorStateList(Color.toArgb(color)), new ColorDrawable(Color.toArgb(color)), null));
   }
 
   void setColor(Drawable drawable, @Nullable Integer color) {
